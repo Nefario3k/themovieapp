@@ -1,0 +1,41 @@
+:root {
+    --bg-color: #1f2931;
+    --secondary-color: #1f2931;
+    --btn-bg-color: #bf1e22;
+    --primary-color: #bf1e22;
+    font-size: 62.5%;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-size: 1.6rem;
+}
+
+* {
+    font-family: Epilogue !important;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    object-fit: contain;
+}
+
+.v-progress-circular__underlay {
+    fill: var(--bg-color) !important;
+}
+
+.relative {
+    position: relative !important;
+}
+
+.v-dialog.v-dialog--active.v-dialog--fullscreen:has(.imgCard),
+.imgCard.v-card.v-sheet.theme--light {
+    background-color: rgba(28, 33, 43, 0.7) !important;
+    /* backdrop-filter: blur(5px); */
+}
+
+.imgCard:has(.modal_content) .modal_content {
+    background-color: transparent !important;
+}

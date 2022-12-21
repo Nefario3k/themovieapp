@@ -1,6 +1,10 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
+  ssr: false,
+  server: {
+    port: process.env.PORT || 3000
+  },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - themovieapp',
@@ -12,12 +16,24 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { href: "https://fonts.googleapis.com/css2?family=Epilogue:wght@300;400;500;600;700&display=swap", rel: "stylesheet" }
+    ],
+    script: [
+      {
+        src: "/scripts/jquery-3.3.1.min.js",
+        type: "text/javascript",
+        body: true,
+        defer: true,
+      },
     ]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    '~/static/css/main.css',
+    '~/static/css/responsive.css',
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -44,7 +60,22 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/',
+    baseURL: process.env.API_BASE,
+  },
+  publicRuntimeConfig: {
+    axios: {
+      browserBaseURL: process.env.API_BASE,
+    },
+  },
+  privateRuntimeConfig: {
+    axios: {
+      baseURL: process.env.API_BASE,
+    },
+  },
+  env: {
+    API_BASE_URL: process.env.API_BASE,
+    API_BASE_IMAGE: process.env.API_IMAGE,
+    API_BASE_KEY: process.env.API_KEY,
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
@@ -58,7 +89,7 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,

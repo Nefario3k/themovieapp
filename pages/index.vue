@@ -1,83 +1,78 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <v-card class="logo py-4 d-flex justify-center">
-        <NuxtLogo />
-        <VuetifyLogo />
-      </v-card>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>
-            For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation
-            </a>.
-          </p>
-          <p>
-            If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord
-            </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board
-            </a>.
-          </p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to="/inspire"
-          >
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+  <div>
+    <section id="heroSection">
+      <Carousel :sliderContent="sliderContent" />
+      <v-container class="container-fluid">
+        <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/o5F8MOz_IDw"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </v-container>
+    </section>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'IndexPage'
-}
+  data() {
+    return {
+      sliderContent: "",
+      movies: [],
+      accessKey: process.env.API_BASE_KEY,
+      lang: "en-US",
+      currentPage: 1,
+    };
+  },
+  async mounted() {
+    console.log(this.accessKey);
+    try {
+      const data = await this.$axios.get(
+        `now_playing?api_key=${this.accessKey}&languagae=${this.lang}&page=${this.currentPage}`
+      );
+      const results = data;
+      results.data.results.forEach((movie) => {
+        this.movies.push(movie);
+      });
+      this.sliderContent = this.movies.slice(0, 10);
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  methods: {},
+  head() {
+    return {
+      title: "Movie App - Latest Streaming Movies And series info",
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content:
+            "Get all the latest streaming movies and series in theaters and online",
+        },
+        {
+          hid: "keywords",
+          name: "keywords",
+          content: "movies, streaming, stream, tv series",
+        },
+      ],
+    };
+  },
+};
 </script>
+
+<style lang="scss" scoped>
+#heroSection {
+  // min-height: 100vh;
+  // background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+  //   url("/images/movieHero.jpg");
+  // background-size: cover;
+  // background-repeat: no-repeat;
+  // background-position: top center;
+  margin-top: -60px;
+}
+</style>
