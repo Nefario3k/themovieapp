@@ -1,10 +1,10 @@
 <template>
   <div>
-    <!-- :cycle="cycle" -->
     <v-carousel
       hide-delimiter-background
       delimiter-icon="mdi-minus"
       :interval="6000"
+      cycle="cycle"
       :show-arrows-on-hover="true"
     >
       <v-carousel-item
@@ -71,10 +71,19 @@
                   </div>
                 </div>
                 <div>
-                  <v-btn class="Btn">
-                    <span>View Info</span>
-                  </v-btn>
-                  <v-btn @click="showModal()" class="Btn trailer">
+                  <nuxt-link
+                    :to="`/movie/${item.id}`"
+                    style="text-decoration: none"
+                  >
+                    <v-btn class="Btn">
+                      <span>View Info</span>
+                    </v-btn>
+                  </nuxt-link>
+                  <v-btn
+                    v-if="item.video_link"
+                    @click="showModal(item.video_link)"
+                    class="Btn trailer"
+                  >
                     <span>Play Trailer</span>
                   </v-btn>
                 </div>
@@ -114,8 +123,8 @@ export default {
     },
   },
   methods: {
-    showModal() {
-      this.$refs.videoModal.showImgModal();
+    showModal(data) {
+      this.$refs.videoModal.showImgModal(data);
     },
   },
 };

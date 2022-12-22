@@ -29,7 +29,6 @@ export default {
     };
   },
   async mounted() {
-    console.log(this.accessKey);
     try {
       const data = await this.$axios.get(
         `now_playing?api_key=${this.accessKey}&languagae=${this.lang}&page=${this.currentPage}`
@@ -38,12 +37,41 @@ export default {
       results.data.results.forEach((movie) => {
         this.movies.push(movie);
       });
-      this.sliderContent = this.movies.slice(0, 10);
+      let slider = this.movies.slice(0, 10);
+      // this.sliderContent = this.movies.slice(0, 10);
+      await this.getTrailers(slider);
     } catch (err) {
       console.log(err);
     }
   },
-  methods: {},
+  methods: {
+    async getTrailers(data) {
+      try {
+        let newData = [];
+        let totalInfo = data;
+        let indexedItem = [];
+        for (var i = 0; i < totalInfo.length; i++) {
+          const slob = await this.$axios.get(
+            `${totalInfo[i].id}/videos?api_key=${this.accessKey}&languagae=${this.lang}`
+          );
+          newData.push(slob.data.results);
+        }
+        newData.forEach((element, index) => {
+          element.forEach((videos) => {
+            if (videos.type == "Trailer") {
+              if (!indexedItem.includes(index)) {
+                indexedItem.push(index);
+                Object.assign(totalInfo[index], { video_link: videos });
+              }
+            }
+          });
+        });
+        this.sliderContent = totalInfo;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  },
   head() {
     return {
       title: "Movie App - Latest Streaming Movies And series info",

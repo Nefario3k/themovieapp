@@ -17,7 +17,7 @@
           </div>
           <div class="closeNavBtn">
             <svg
-              @click="showModal = false"
+              @click="closeModal()"
               width="40"
               height="40"
               viewBox="0 0 50 50"
@@ -47,7 +47,7 @@
             <iframe
               width="560"
               height="315"
-              src="https://www.youtube.com/embed/o5F8MOz_IDw"
+              :src="`https://www.youtube.com/embed/${videoData.key}?rel=0&showinfo=0&autohide=1&modestbranding=1`"
               title="YouTube video player"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -65,12 +65,19 @@ export default {
   data() {
     return {
       showModal: false,
+      videoData: {},
     };
   },
   mounted() {},
   methods: {
-    showImgModal() {
+    showImgModal(data) {
       this.showModal = true;
+      this.videoData = data;
+      console.log(data);
+    },
+    closeModal() {
+      this.showModal = false;
+      this.videoData = {};
     },
   },
 };
@@ -118,15 +125,17 @@ export default {
   padding-top: 0;
   margin: 0;
   margin-top: -20px;
+  padding-bottom: 0;
   .img_large_container {
-    height: 85vh;
+    height: 90vh;
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    width: 85%;
+    width: 65%;
     margin: auto;
     opacity: 1;
-    transition: background-image 0.5s linear;
+    transition: all 0.5s linear;
+    padding-bottom: 0;
   }
 }
 iframe {

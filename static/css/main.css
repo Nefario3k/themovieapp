@@ -30,6 +30,10 @@ body {
     position: relative !important;
 }
 
+.absolute {
+    position: absolute !important;
+}
+
 .v-dialog.v-dialog--active.v-dialog--fullscreen:has(.imgCard),
 .imgCard.v-card.v-sheet.theme--light {
     background-color: rgba(28, 33, 43, 0.7) !important;
@@ -38,4 +42,8 @@ body {
 
 .imgCard:has(.modal_content) .modal_content {
     background-color: transparent !important;
+}
+
+#heroSection {
+    margin-top: -60px;
 }
