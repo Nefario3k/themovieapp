@@ -16,7 +16,10 @@
         <v-container class="contentInfoWrapper">
           <v-row class="contentRow">
             <div class="col-3 poster">
-              <img :src="imageLink + imgSize + item.poster_path" alt="" />
+              <img
+                :src="imageLink + imgSize + item.poster_path"
+                :alt="item.original_title"
+              />
             </div>
             <v-row
               class="
@@ -119,7 +122,6 @@ export default {
           Object.assign(element, { color: "#bf1e22" });
         }
       });
-      console.log(this.sliderContent);
     },
   },
   methods: {

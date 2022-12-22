@@ -47,3 +47,131 @@ body {
 #heroSection {
     margin-top: -60px;
 }
+
+.tabBarContainer {
+    margin-bottom: 25px;
+}
+
+.tabBarContainer .tabHeader {
+    /* width: 92%; */
+    padding-left: 52px;
+    margin: 15px 0;
+    width: max-content;
+}
+
+.tabBarContainer .tabHeader header {
+    font-size: 2rem;
+    color: var(--secondary-color);
+    font-weight: 600;
+    padding-right: 12px;
+}
+
+.tabBarContainer .tabHeader .lineUnder {
+    height: 4px;
+    background-color: var(--primary-color);
+    border-radius: 30px;
+}
+
+.flex_down {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.flex_all_center {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
+.imgContainer {
+    border-radius: 16px;
+    overflow: hidden !important;
+    height: 350px;
+    width: 100%;
+}
+
+.imgContainer .video_ratings {
+    z-index: 3;
+    background-color: var(--btn-bg-color);
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    color: #fff;
+    border-radius: 0 0 16px 0 !important;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 10%), 0 2px 4px -1px rgb(0 0 0 / 6%);
+    font-size: 1.2rem;
+}
+
+.imgContainer .overview {
+    line-height: 1.5;
+    bottom: 0;
+    /* background-color: var(--secondary-color); */
+    background: linear-gradient(rgba(31.5, 31.5, 31.5, 0.5),
+            rgba(31.5, 31.5, 31.5, 0.84));
+    padding: 12px;
+    color: #fff;
+    text-transform: none;
+    text-align: left;
+    font-size: 1.2rem;
+    transform: translateY(100%);
+    transition: 0.3s ease-in-out all;
+    border-radius: 0 0 16px 16px;
+}
+
+.imgContainer .overview a {
+    color: #fff;
+}
+
+.imgContainer .overview a:hover {
+    color: var(--btn-bg-color);
+}
+
+.imgContainer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 16px;
+}
+
+.imgContainer:hover img {
+    transform: scale(1.1);
+    filter: blur(2px);
+    transition: all 0.5s ease-in-out;
+}
+
+.imgContainer.trending:hover img {
+    filter: none !important;
+}
+
+.imgContainer:hover .overview {
+    transform: translateY(0);
+}
+
+.listingTag {
+    margin-top: 10px;
+    height: 50px;
+}
+
+.listingTag a {
+    text-decoration: none !important;
+}
+
+.listingTag a:hover h3 {
+    color: var(--primary-color);
+}
+
+.listingTag h3 {
+    color: var(--secondary-color);
+    font-size: 1.6rem;
+    margin-bottom: 5px;
+    font-weight: 600;
+    text-transform: none;
+    text-decoration: none !important;
+}
+
+.listingTag p {
+    color: var(--secondary-color);
+    font-size: 1.1rem;
+    margin: 0;
+}

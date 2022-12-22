@@ -6,7 +6,7 @@
       <section id="heroSection" class="relative">
         <div class="absolute">
           <v-img
-            :alt="movie.original_title"
+            :alt="movie.name"
             :gradient="`rgba(31.5, 31.5, 31.5, 0.5), rgba(31.5, 31.5, 31.5, 0.84)`"
             :src="imageLink + imgSize + movie.backdrop_path"
             style="width: 100vw; height: 100%"
@@ -17,7 +17,7 @@
             <div class="col-4 poster">
               <img
                 :src="imageLink + imgSize + movie.poster_path"
-                :alt="movie.original_title"
+                :alt="movie.name"
               />
             </div>
             <v-row
@@ -30,7 +30,7 @@
                 <!-- header  -->
                 <div class="content_columns content_header">
                   <header class="content_title">
-                    {{ movie.original_title }}
+                    {{ movie.name }}
                   </header>
                 </div>
                 <!-- ratings  -->
@@ -100,7 +100,7 @@ export default {
     return {
       movie: "",
       vipCrew: [],
-      videoTypeOf: ["movie", "trending"],
+      videoTypeOf: ["movie", "tv"],
       accessKey: process.env.API_BASE_KEY,
       lang: "en-US",
       imageLink: process.env.API_BASE_IMAGE,
@@ -110,18 +110,18 @@ export default {
   async mounted() {
     // get single video data
     const data = await this.$axios.get(
-      `${this.videoTypeOf[0]}/${this.$route.params.movieId}?api_key=${this.accessKey}&languagae=${this.lang}`
+      `${this.videoTypeOf[1]}/${this.$route.params.id}?api_key=${this.accessKey}&languagae=${this.lang}`
     );
     // set video data
     const result = await data;
 
     // get video urls
     const videoData = await this.$axios.get(
-      `${this.videoTypeOf[0]}/${result.data.id}/videos?api_key=${this.accessKey}&languagae=${this.lang}`
+      `${this.videoTypeOf[1]}/${result.data.id}/videos?api_key=${this.accessKey}&languagae=${this.lang}`
     );
     // get cast
     const cast = await this.$axios.get(
-      `${this.videoTypeOf[0]}/${result.data.id}/credits?api_key=${this.accessKey}&languagae=${this.lang}`
+      `${this.videoTypeOf[1]}/${result.data.id}/credits?api_key=${this.accessKey}&languagae=${this.lang}`
     );
 
     // set video url data
@@ -148,27 +148,21 @@ export default {
     } else {
       Object.assign(result.data, { color: "#bf1e22" });
     }
-    // get writers, directors and character dev
-    let directors = [];
+    // get creators and character dev
+    let creators = [];
     let characters = [];
-    let writers = [];
     cast.data.crew.forEach((element) => {
-      if (element.job == "Director") {
-        directors.push(element);
+      if (element.job == "Creator") {
+        creators.push(element);
       } else if (
         element.department == "Writing" &&
         element.job == "Characters"
       ) {
         characters.push(element);
-      } else if (
-        element.department == "Writing" &&
-        element.job != "Characters"
-      ) {
-        writers.push(element);
       }
     });
-    if (directors.length) {
-      directors.forEach((element) => {
+    if (creators.length) {
+      creators.forEach((element) => {
         this.vipCrew.push(element);
       });
     }
@@ -177,16 +171,9 @@ export default {
         this.vipCrew.push(element);
       });
     }
-    if (writers.length) {
-      writers.forEach((element) => {
-        this.vipCrew.push(element);
-      });
-    }
     this.movie = result.data;
     console.log(this.movie);
     // console.log(cast.data.crew);
-    console.log(this.vipCrew);
-    console.log(this.$route.path);
   },
   methods: {
     showModal(data) {

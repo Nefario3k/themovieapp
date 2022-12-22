@@ -2,7 +2,7 @@
   <div>
     <section id="heroSection">
       <Carousel :sliderContent="sliderContent" />
-      <v-container class="container-fluid">
+      <!-- <v-container class="container-fluid">
         <iframe
           width="560"
           height="315"
@@ -12,8 +12,14 @@
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
         ></iframe>
-      </v-container>
+      </v-container> -->
     </section>
+    <VideoTabs
+      v-for="(item, index) in videoContent"
+      :key="index"
+      :movies="item.movies"
+      :title="item.title"
+    />
   </div>
 </template>
 
@@ -23,23 +29,95 @@ export default {
     return {
       sliderContent: "",
       movies: [],
+      videoContent: [
+        {
+          title: "Now Playing",
+          movies: [],
+        },
+        {
+          title: "What's Popular",
+          movies: [],
+        },
+        {
+          title: "Top Rated",
+          movies: [],
+        },
+        {
+          title: "Upcoming Movies",
+          movies: [],
+        },
+        {
+          title: "Trending",
+          movies: [],
+        },
+      ],
+      videoTypeOf: ["movie", "trending"],
       accessKey: process.env.API_BASE_KEY,
+      imageLink: process.env.API_BASE_IMAGE,
+      imgSize: "original/",
       lang: "en-US",
+      trending_type: "all",
+      trendingFormat: "week",
       currentPage: 1,
     };
   },
   async mounted() {
     try {
-      const data = await this.$axios.get(
-        `now_playing?api_key=${this.accessKey}&languagae=${this.lang}&page=${this.currentPage}`
+      // get now playing
+      const nowPlaying = await this.$axios.get(
+        `${this.videoTypeOf[0]}/now_playing?api_key=${this.accessKey}&languagae=${this.lang}&page=${this.currentPage}`
       );
-      const results = data;
-      results.data.results.forEach((movie) => {
-        this.movies.push(movie);
+
+      // iteriate through data fields and assign property asap
+      nowPlaying.data.results.forEach((movie) => {
+        this.videoContent[0].movies.push(movie);
       });
-      let slider = this.movies.slice(0, 10);
-      // this.sliderContent = this.movies.slice(0, 10);
+
+      // get trailers
+      let slider = this.videoContent[0].movies.slice(0, 10);
       await this.getTrailers(slider);
+
+      // get popular
+      const popular = await this.$axios.get(
+        `${this.videoTypeOf[0]}/popular?api_key=${this.accessKey}&languagae=${this.lang}&page=${this.currentPage}`
+      );
+
+      // iteriate through data fields and assign property
+      popular.data.results.forEach((movie) => {
+        this.videoContent[1].movies.push(movie);
+      });
+
+      // get Top rated movies
+      const top_rated = await this.$axios.get(
+        `${this.videoTypeOf[0]}/top_rated?api_key=${this.accessKey}&languagae=${this.lang}&page=${this.currentPage}`
+      );
+
+      // iteriate through data fields and assign property
+      top_rated.data.results.forEach((movie) => {
+        this.videoContent[2].movies.push(movie);
+      });
+
+      // get Upcoming movies
+      const upcoming = await this.$axios.get(
+        `${this.videoTypeOf[0]}/upcoming?api_key=${this.accessKey}&languagae=${this.lang}`
+      );
+
+      // iteriate through data fields and assign property
+      upcoming.data.results.forEach((movie) => {
+        this.videoContent[3].movies.push(movie);
+      });
+
+      // get Trending
+      const trending = await this.$axios.get(
+        `${this.videoTypeOf[1]}/${this.trending_type}/${this.trendingFormat}?api_key=${this.accessKey}`
+      );
+
+      // iteriate through data fields and assign property
+      trending.data.results.forEach((movie) => {
+        this.videoContent[4].movies.push(movie);
+      });
+      console.log(upcoming);
+      // console.log(trending);
     } catch (err) {
       console.log(err);
     }
@@ -52,7 +130,7 @@ export default {
         let indexedItem = [];
         for (var i = 0; i < totalInfo.length; i++) {
           const slob = await this.$axios.get(
-            `${totalInfo[i].id}/videos?api_key=${this.accessKey}&languagae=${this.lang}`
+            `${this.videoTypeOf[0]}/${totalInfo[i].id}/videos?api_key=${this.accessKey}&languagae=${this.lang}`
           );
           newData.push(slob.data.results);
         }
