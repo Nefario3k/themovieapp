@@ -89,6 +89,16 @@
           </v-row>
         </v-container>
       </section>
+      <section id="bodyContent">
+        <v-row class="contentrow">
+          <div class="col-12 col-sm-9 col-md-9 col-lg-9 col-xl-9 leftPath">
+            <CastTabs :castData="castData.cast" :title="castData.title" />
+          </div>
+          <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 righPath">
+            wdwdwd
+          </div>
+        </v-row>
+      </section>
       <VideoDialogue ref="videoModal" />
     </div>
   </div>
@@ -105,6 +115,10 @@ export default {
       lang: "en-US",
       imageLink: process.env.API_BASE_IMAGE,
       imgSize: "original/",
+      castData: {
+        title: "Meet The Cast",
+        cast: [],
+      },
     };
   },
   async mounted() {
@@ -119,10 +133,6 @@ export default {
     const videoData = await this.$axios.get(
       `${this.videoTypeOf[1]}/${result.data.id}/videos?api_key=${this.accessKey}&languagae=${this.lang}`
     );
-    // get cast
-    const cast = await this.$axios.get(
-      `${this.videoTypeOf[1]}/${result.data.id}/credits?api_key=${this.accessKey}&languagae=${this.lang}`
-    );
 
     // set video url data
     const vR = await videoData.data.results;
@@ -136,6 +146,7 @@ export default {
         }
       }
     });
+
     //   reset vote average due to it coming back from the api as a long numerical decimal
     result.data.vote_average = Math.ceil(result.data.vote_average * 10);
     if (result.data.vote_average >= 75) {
@@ -148,6 +159,12 @@ export default {
     } else {
       Object.assign(result.data, { color: "#bf1e22" });
     }
+    this.movie = result.data;
+    // get cast
+    const cast = await this.$axios.get(
+      `${this.videoTypeOf[1]}/${result.data.id}/credits?api_key=${this.accessKey}&languagae=${this.lang}`
+    );
+
     // get creators and character dev
     let creators = [];
     let characters = [];
@@ -171,9 +188,9 @@ export default {
         this.vipCrew.push(element);
       });
     }
-    this.movie = result.data;
-    console.log(this.movie);
+    this.castData.cast = cast.data.cast.slice(0, 10);
     // console.log(cast.data.crew);
+    console.log(this.castData.cast);
   },
   methods: {
     showModal(data) {

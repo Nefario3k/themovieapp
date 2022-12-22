@@ -148,6 +148,16 @@ body {
     transform: translateY(0);
 }
 
+.listingTab.v-tab {
+    border-radius: 16px !important;
+    /* border: 1px solid red !important; */
+    /* padding: 0 !important; */
+}
+
+.listingTab.v-tab:before {
+    display: none !important;
+}
+
 .listingTag {
     margin-top: 10px;
     height: 50px;
