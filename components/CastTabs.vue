@@ -38,7 +38,9 @@
                 </div> -->
               </div>
               <div class="listingTag">
-                <nuxt-link :to="`/celeb/${item.id}`">
+                <nuxt-link
+                  :to="`/persons/${item.id}?query=${item.original_name}`"
+                >
                   <h3>{{ item.original_name }}</h3>
                 </nuxt-link>
                 <p>

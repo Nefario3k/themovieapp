@@ -1,6 +1,6 @@
 <template>
   <v-app dark>
-    <TopBar />
+    <DarkBar />
     <v-main app>
       <Nuxt />
     </v-main>
@@ -18,6 +18,7 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
+      searchedTitle: "",
     };
   },
 };

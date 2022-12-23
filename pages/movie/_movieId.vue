@@ -4,19 +4,27 @@
     <Loading v-if="!movie" />
     <div v-else>
       <section id="heroSection" class="relative">
-        <div class="absolute">
+        <div class="absolute" style="height: 100%">
           <v-img
+            v-if="movie.backdrop_path"
             :alt="movie.original_title"
             :gradient="`rgba(31.5, 31.5, 31.5, 0.5), rgba(31.5, 31.5, 31.5, 0.84)`"
             :src="imageLink + imgSize + movie.backdrop_path"
             style="width: 100vw; height: 100%"
           ></v-img>
+          <div v-else class="noImage"></div>
         </div>
         <v-container class="containedHero relative">
           <v-row class="contentRow">
             <div class="col-4 poster">
               <img
+                v-if="movie.poster_path && movie.poster_path != null"
                 :src="imageLink + imgSize + movie.poster_path"
+                :alt="movie.original_title"
+              />
+              <img
+                v-else
+                src="/images/poster.png"
                 :alt="movie.original_title"
               />
             </div>
@@ -63,7 +71,10 @@
                   </div>
                 </div>
                 <!-- overview  -->
-                <div class="content_columns content_ratings">
+                <div
+                  v-if="movie.overview"
+                  class="content_columns content_ratings"
+                >
                   <div class="ratings_wrapper">
                     <span class="bold">Overview: </span>
                     <br />
@@ -212,8 +223,6 @@ export default {
       });
     }
     this.castData.cast = cast.data.cast.slice(0, 10);
-    // console.log(cast.data.crew);
-    console.log(this.castData.cast);
   },
   methods: {
     showModal(data) {
@@ -225,7 +234,7 @@ export default {
 
 <style lang="scss" scoped>
 #heroSection {
-  height: 100vh;
+  min-height: 110vh;
   overflow: hidden;
   .containedHero {
     display: flex;

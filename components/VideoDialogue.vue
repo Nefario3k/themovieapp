@@ -73,7 +73,6 @@ export default {
     showImgModal(data) {
       this.showModal = true;
       this.videoData = data;
-      console.log(data);
     },
     closeModal() {
       this.showModal = false;

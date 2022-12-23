@@ -22,6 +22,15 @@ body {
     object-fit: contain;
 }
 
+.v-application ul,
+.v-application ol {
+    padding-left: 0 !important;
+}
+
+.topNav {
+    transition: all 0.3s linear !important;
+}
+
 .v-progress-circular__underlay {
     fill: var(--bg-color) !important;
 }
@@ -32,6 +41,18 @@ body {
 
 .absolute {
     position: absolute !important;
+}
+
+.noImage {
+    width: 100vw;
+    height: 100%;
+    background: linear-gradient(rgba(31.5, 31.5, 31.5, 0.5),
+            rgba(31.5, 31.5, 31.5, 0.84));
+}
+
+.contentrow {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
 }
 
 .v-dialog.v-dialog--active.v-dialog--fullscreen:has(.imgCard),
@@ -134,13 +155,15 @@ body {
     border-radius: 16px;
 }
 
-.imgContainer:hover img {
+.imgContainer:hover img,
+.imgContainer:hover .v-image__image--cover {
     transform: scale(1.1);
     filter: blur(2px);
     transition: all 0.5s ease-in-out;
 }
 
-.imgContainer.trending:hover img {
+.imgContainer.trending:hover img,
+.imgContainer.trending:hover .v-image__image--cover {
     filter: none !important;
 }
 
@@ -184,4 +207,11 @@ body {
     color: var(--secondary-color);
     font-size: 1.1rem;
     margin: 0;
+}
+
+/* pagination styles  */
+.pagination_container {
+    width: 70%;
+    margin: 0 auto;
+    margin-bottom: 15px;
 }
