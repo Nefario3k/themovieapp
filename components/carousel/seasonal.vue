@@ -1,108 +1,6 @@
 <template>
   <div>
     <!-- movies  -->
-    <v-carousel
-      hide-delimiter-background
-      delimiter-icon="mdi-minus"
-      :interval="6000"
-      cycle="cycle"
-      :show-arrows-on-hover="true"
-      v-if="title != 'seasonal'"
-    >
-      <v-carousel-item
-        v-for="(item, index) in sliderContent"
-        :key="index"
-        :gradient="`rgba(31.5, 31.5, 31.5, 0.5), rgba(31.5, 31.5, 31.5, 0.84)`"
-        :src="imageLink + imgSize + item.backdrop_path"
-      >
-        <v-container class="contentInfoWrapper">
-          <v-row class="contentRow">
-            <div class="col-3 poster">
-              <img
-                v-if="item.poster_path && item.poster_path != null"
-                :src="imageLink + imgSize + item.poster_path"
-                :alt="item.original_title"
-              />
-              <img v-else src="/images/poster.png" :alt="item.original_title" />
-            </div>
-            <v-row
-              class="
-                col-12 col-sm-9 col-md-9 col-lg-9 col-xl-9
-                content_container
-              "
-            >
-              <div class="hero_content">
-                <div class="content_columns content_header">
-                  <header class="content_title">
-                    {{ item.original_title }}
-                  </header>
-                </div>
-                <div class="content_columns content_ratings">
-                  <div class="ratings_wrapper">
-                    <span class="bold">Ratings: </span>
-
-                    <v-progress-circular
-                      :color="item.color"
-                      :width="4"
-                      :size="50"
-                      :rotate="-90"
-                      :value="item.vote_average * 10"
-                      ><span class="rating_percent"
-                        >{{ item.vote_average * 10 }}<sup>%</sup></span
-                      ></v-progress-circular
-                    >
-                  </div>
-                </div>
-                <div
-                  v-if="item.overview"
-                  class="content_columns content_ratings"
-                >
-                  <div class="ratings_wrapper">
-                    <span class="bold">Overview: </span>
-                    <br />
-                    <span>{{ item.overview }}</span>
-
-                    <!-- <v-list-item
-                    :three-line="true"
-                    style="padding-left: 0; padding-top: 0"
-                  >
-                    <v-list-item-content style="padding-top: 0">
-                      <v-list-item-title
-                        ><span class="bold">Overview: </span></v-list-item-title
-                      >
-                      <v-list-item-subtitle style="line-height: 20px">
-                        <span>{{ item.overview }}</span>
-                      </v-list-item-subtitle>
-                      <v-list-item-subtitle>
-          consectetur adipiscing elit.
-        </v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item> -->
-                  </div>
-                </div>
-                <div>
-                  <nuxt-link
-                    :to="`/movie/${item.id}`"
-                    style="text-decoration: none"
-                  >
-                    <v-btn class="Btn">
-                      <span>View Info</span>
-                    </v-btn>
-                  </nuxt-link>
-                  <v-btn
-                    v-if="item.video_link"
-                    @click="showModal(item.video_link)"
-                    class="Btn trailer"
-                  >
-                    <span>Play Trailer</span>
-                  </v-btn>
-                </div>
-              </div>
-            </v-row>
-          </v-row>
-        </v-container>
-      </v-carousel-item>
-    </v-carousel>
     <!-- series  -->
     <v-carousel
       hide-delimiter-background
@@ -110,10 +8,9 @@
       :interval="6000"
       cycle="cycle"
       :show-arrows-on-hover="true"
-      v-else
     >
       <v-carousel-item
-        v-for="(item, index) in sliderContent"
+        v-for="(item, index) in $getSeasonalTrailers()"
         :key="index"
         :gradient="`rgba(31.5, 31.5, 31.5, 0.5), rgba(31.5, 31.5, 31.5, 0.84)`"
         :src="imageLink + imgSize + item.backdrop_path"

@@ -1,18 +1,7 @@
 <template>
   <div>
     <section id="heroSection">
-      <Carousel :sliderContent="sliderContent" title="movie" />
-      <!-- <v-container class="container-fluid">
-        <iframe
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/o5F8MOz_IDw"
-          title="YouTube video player"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        ></iframe>
-      </v-container> -->
+      <CarouselMovie title="movie" />
     </section>
     <VideoTabs
       v-for="(item, index) in videoContent"
@@ -27,8 +16,6 @@
 export default {
   data() {
     return {
-      sliderContent: "",
-      movies: [],
       videoContent: [
         {
           title: "Trending Movies",
@@ -63,92 +50,63 @@ export default {
     };
   },
   async mounted() {
+    let requetParams = {
+      media: this.videoTypeOf[0],
+      key: this.accessKey,
+      lang: this.lang,
+      page: this.currentPage,
+    };
+    let trendingParams = {
+      media: this.videoTypeOf[1],
+      type: this.trending_type,
+      format: this.trendingFormat,
+      key: this.accessKey,
+    };
     try {
-      // get Trending
-      const trending = await this.$axios.get(
-        `${this.videoTypeOf[1]}/${this.trending_type}/${this.trendingFormat}?api_key=${this.accessKey}`
-      );
-
-      // iteriate through data fields and assign property
-      trending.data.results.forEach((movie) => {
-        this.videoContent[0].movies.push(movie);
-      });
-
       // get Upcoming movies
-      const upcoming = await this.$axios.get(
-        `${this.videoTypeOf[0]}/upcoming?api_key=${this.accessKey}&languagae=${this.lang}`
-      );
+      if (!this.$getUpcomingMovies().length) {
+        await this.$store.dispatch("upcomingMovies", requetParams);
+        this.videoContent[1].movies = await this.$getUpcomingMovies();
+      } else {
+        this.videoContent[1].movies = await this.$getUpcomingMovies();
+      }
 
-      // iteriate through data fields and assign property
-      upcoming.data.results.forEach((movie) => {
-        this.videoContent[1].movies.push(movie);
-      });
-
-      // get trailers
-      let slider = this.videoContent[1].movies.slice(0, 10);
-      await this.getTrailers(slider);
+      // get Trending
+      if (!this.$getTrending().length) {
+        await this.$store.dispatch("trending", trendingParams);
+        this.videoContent[0].movies = await this.$getTrending();
+      } else {
+        this.videoContent[0].movies = await this.$getTrending();
+      }
 
       // get now playing
-      const nowPlaying = await this.$axios.get(
-        `${this.videoTypeOf[0]}/now_playing?api_key=${this.accessKey}&languagae=${this.lang}&page=${this.currentPage}`
-      );
-
-      // iteriate through data fields and assign property asap
-      nowPlaying.data.results.forEach((movie) => {
-        this.videoContent[2].movies.push(movie);
-      });
+      if (!this.$getNowPlaying().length) {
+        await this.$store.dispatch("nowPlaying", requetParams);
+        this.videoContent[2].movies = await this.$getNowPlaying();
+      } else {
+        this.videoContent[2].movies = await this.$getNowPlaying();
+      }
 
       // get popular
-      const popular = await this.$axios.get(
-        `${this.videoTypeOf[0]}/popular?api_key=${this.accessKey}&languagae=${this.lang}&page=${this.currentPage}`
-      );
-
-      // iteriate through data fields and assign property
-      popular.data.results.forEach((movie) => {
-        this.videoContent[3].movies.push(movie);
-      });
+      if (!this.$getPopular().length) {
+        await this.$store.dispatch("popular", requetParams);
+        this.videoContent[3].movies = await this.$getPopular();
+      } else {
+        this.videoContent[3].movies = await this.$getPopular();
+      }
 
       // get Top rated movies
-      const top_rated = await this.$axios.get(
-        `${this.videoTypeOf[0]}/top_rated?api_key=${this.accessKey}&languagae=${this.lang}&page=${this.currentPage}`
-      );
-
-      // iteriate through data fields and assign property
-      top_rated.data.results.forEach((movie) => {
-        this.videoContent[4].movies.push(movie);
-      });
+      if (!this.$getTopRated().length) {
+        await this.$store.dispatch("topRated", requetParams);
+        this.videoContent[4].movies = await this.$getTopRated();
+      } else {
+        this.videoContent[4].movies = await this.$getTopRated();
+      }
     } catch (err) {
       console.log(err);
     }
   },
-  methods: {
-    async getTrailers(data) {
-      try {
-        let newData = [];
-        let totalInfo = data;
-        let indexedItem = [];
-        for (var i = 0; i < totalInfo.length; i++) {
-          const slob = await this.$axios.get(
-            `${this.videoTypeOf[0]}/${totalInfo[i].id}/videos?api_key=${this.accessKey}&languagae=${this.lang}`
-          );
-          newData.push(slob.data.results);
-        }
-        newData.forEach((element, index) => {
-          element.forEach((videos) => {
-            if (videos.type == "Trailer") {
-              if (!indexedItem.includes(index)) {
-                indexedItem.push(index);
-                Object.assign(totalInfo[index], { video_link: videos });
-              }
-            }
-          });
-        });
-        this.sliderContent = totalInfo;
-      } catch (err) {
-        console.log(err);
-      }
-    },
-  },
+  methods: {},
   head() {
     return {
       title: "Movie App - Latest Streaming Movies And series info",
