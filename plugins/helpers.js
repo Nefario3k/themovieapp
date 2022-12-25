@@ -101,4 +101,20 @@ export default (context, inject) => {
     inject('getReviews', () => {
         return context.store.state.reviews;
     })
+
+    inject('getNowPlayingOthers', () => {
+        return context.store.state.nowPlayingOthers;
+    })
+
+    inject('getPopularOthers', () => {
+        return context.store.state.popularOthers;
+    })
+
+    inject('getTopRatedOthers', () => {
+        return context.store.state.topRatedOthers;
+    })
+
+    inject('getUpcomingOthers', () => {
+        return context.store.state.upcomingOthers;
+    })
 }

@@ -3,8 +3,18 @@
     <div v-if="title != 'Trending' && title != 'known for'">
       <div v-if="movies.length" class="tabBarContainer">
         <div class="tabHeader">
-          <header>{{ title }}</header>
-          <div class="lineUnder"></div>
+          <div class="titleWrapper_cont">
+            <header>{{ title }}</header>
+            <div class="lineUnder"></div>
+          </div>
+          <div class="pagination_container_videos">
+            <v-pagination
+              @input="pageController()"
+              :color="`var(--primary-color)`"
+              v-model="page"
+              :length="3"
+            ></v-pagination>
+          </div>
         </div>
         <div class="tab_wrapper">
           <v-tabs
@@ -311,6 +321,7 @@ export default {
     return {
       imageLink: process.env.API_BASE_IMAGE,
       imgSize: "original/",
+      page: 1,
     };
   },
   methods: {
@@ -318,6 +329,9 @@ export default {
       var variable = "";
       variable = Math.ceil(item * 10) / 10;
       return variable;
+    },
+    async pageController() {
+      console.log(this.page);
     },
   },
 };

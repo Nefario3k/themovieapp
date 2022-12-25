@@ -166,7 +166,23 @@ h3.back:hover svg {
     /* width: 92%; */
     padding-left: 52px;
     margin: 15px 0;
-    width: max-content;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* width: max-content; */
+}
+
+.pagination_container_videos {
+    /* width: 50%; */
+}
+
+.pagination_container_videos .v-pagination {
+    justify-content: flex-end;
+    padding-right: 12px;
+}
+
+.pagination_container_videos .v-pagination li:has(button.v-pagination__navigation) {
+    display: none !important;
 }
 
 .tabBarContainer .tabHeader header {

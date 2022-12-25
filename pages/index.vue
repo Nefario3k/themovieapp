@@ -2,17 +2,6 @@
   <div>
     <section id="heroSection">
       <CarouselHome :sliderContent="sliderContent" title="movie" />
-      <!-- <v-container class="container-fluid">
-        <iframe
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/o5F8MOz_IDw"
-          title="YouTube video player"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        ></iframe>
-      </v-container> -->
     </section>
     <VideoTabs
       v-for="(item, index) in videoContent"
@@ -114,6 +103,17 @@ export default {
       } else {
         this.videoContent[4].movies = await this.$getTrending();
       }
+
+      await this.$store.dispatch("nowPlayingOthers", requetParams);
+      await this.$store.dispatch("popularOthers", requetParams);
+
+      await this.$store.dispatch("topRatedOthers", requetParams);
+
+      await this.$store.dispatch("upcomingOthers", requetParams);
+      console.log(await this.$getNowPlayingOthers());
+      console.log(await this.$getPopularOthers());
+      console.log(await this.$getTopRatedOthers());
+      console.log(await this.$getUpcomingOthers());
     } catch (err) {
       console.log(err);
     }

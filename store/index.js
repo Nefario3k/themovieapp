@@ -3,14 +3,19 @@ export const state = () => ({
     searchedDataCount: '',
     searchPersonData: [],
     nowPlaying: [],
+    nowPlayingOthers: [],
     popular: [],
+    popularOthers: [],
     popularSeries: [],
     topRated: [],
+    topRatedOthers: [],
     topRatedSeries: [],
     onTheAir: [],
     upcoming: [],
+    upcomingOthers: [],
     upcomingMovies: [],
     trending: [],
+    trendingOthers: [],
     trendingSeries: [],
     trailers: [],
     movieTrailers: [],
@@ -100,6 +105,21 @@ export const actions = {
             console.log(err)
         }
     },
+    async nowPlayingOthers({ commit }, data) {
+        try {
+            let initial = []
+            for (var i = 2; i < 4; i++) {
+                await this.$axios.get(
+                    `${data.media}/now_playing?api_key=${data.key}&languagae=${data.lang}&page=${i}`
+                ).then((res) => {
+                    initial.push(res.data.results)
+                })
+            }
+            commit('setNowPlayingOthers', initial)
+        } catch (err) {
+            console.log(err)
+        }
+    },
     async popular({ commit }, data) {
         try {
             await this.$axios.get(
@@ -107,6 +127,22 @@ export const actions = {
             ).then((res) => {
                 commit('setPopular', res.data.results)
             })
+        } catch (err) {
+            console.log(err)
+        }
+    },
+    async popularOthers({ commit }, data) {
+        try {
+            let initial = []
+            for (var i = 2; i < 4; i++) {
+                await this.$axios.get(
+                    `${data.media}/popular?api_key=${data.key}&languagae=${data.lang}&page=${i}`
+                ).then((res) => {
+                    initial.push(res.data.results)
+                })
+            }
+            commit('setPopularOthers', initial)
+
         } catch (err) {
             console.log(err)
         }
@@ -129,6 +165,22 @@ export const actions = {
             ).then((res) => {
                 commit('setTopRated', res.data.results)
             })
+        } catch (err) {
+            console.log(err)
+        }
+    },
+    async topRatedOthers({ commit }, data) {
+        try {
+            let initial = []
+            for (var i = 2; i < 4; i++) {
+                await this.$axios.get(
+                    `${data.media}/top_rated?api_key=${data.key}&languagae=${data.lang}&page=${i}`
+                ).then((res) => {
+                    initial.push(res.data.results)
+                })
+            }
+            commit('setTopRatedOthers', initial)
+
         } catch (err) {
             console.log(err)
         }
@@ -174,6 +226,21 @@ export const actions = {
             console.log(err)
         }
     },
+    async upcomingOthers({ commit }, data) {
+        try {
+            let initial = []
+            for (var i = 2; i < 4; i++) {
+                await this.$axios.get(
+                    `${data.media}/upcoming?api_key=${data.key}&languagae=${data.lang}&page=${i}`
+                ).then((res) => {
+                    initial.push(res.data.results)
+                })
+            }
+            commit('setUpcomingOthers', initial)
+        } catch (err) {
+            console.log(err)
+        }
+    },
     async upcomingMovies({ commit, dispatch }, data) {
         try {
             await this.$axios.get(
@@ -200,6 +267,21 @@ export const actions = {
             ).then((res) => {
                 commit('setTrending', res.data.results)
             })
+        } catch (err) {
+            console.log(err)
+        }
+    },
+    async trendingOthers({ commit }, data) {
+        try {
+            let initial = []
+            for (var i = 2; i < 4; i++) {
+                await this.$axios.get(
+                    `${data.media}/${data.type}/${data.format}?api_key=${data.key}`
+                ).then((res) => {
+                    initial.push(res.data.results)
+                })
+            }
+            commit('setTrendingOthers', initial)
         } catch (err) {
             console.log(err)
         }
@@ -342,14 +424,23 @@ export const mutations = {
     setNowPlaying(state, nowPlaying) {
         state.nowPlaying = nowPlaying
     },
+    setNowPlayingOthers(state, nowPlayingOthers) {
+        state.nowPlayingOthers = nowPlayingOthers
+    },
     setPopular(state, popular) {
         state.popular = popular
+    },
+    setPopularOthers(state, popularOthers) {
+        state.popularOthers = popularOthers
     },
     setPopularSeries(state, popularSeries) {
         state.popularSeries = popularSeries
     },
     setTopRated(state, topRated) {
         state.topRated = topRated
+    },
+    setTopRatedOthers(state, topRatedOthers) {
+        state.topRatedOthers = topRatedOthers
     },
     setTopRatedSeries(state, topRatedSeries) {
         state.topRatedSeries = topRatedSeries
@@ -360,11 +451,17 @@ export const mutations = {
     setUpcoming(state, upcoming) {
         state.upcoming = upcoming
     },
+    setUpcomingOthers(state, upcomingOthers) {
+        state.upcomingOthers = upcomingOthers
+    },
     setUpcomingMovies(state, upcomingMovies) {
         state.upcomingMovies = upcomingMovies
     },
     setTrending(state, trending) {
         state.trending = trending
+    },
+    setTrendingOthers(state, trendingOthers) {
+        state.trendingOthers = trendingOthers
     },
     setTrendingSeries(state, trendingSeries) {
         state.trendingSeries = trendingSeries
