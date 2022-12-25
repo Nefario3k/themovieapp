@@ -93,4 +93,12 @@ export default (context, inject) => {
         });
         return trailer;
     })
+
+    inject('getAllVideos', () => {
+        return context.store.state.allVideos;
+    })
+
+    inject('getReviews', () => {
+        return context.store.state.reviews;
+    })
 }

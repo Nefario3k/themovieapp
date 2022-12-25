@@ -22,6 +22,25 @@ body {
     object-fit: contain;
 }
 
+/* .heroCarousel.v-carousel .v-item-group .v-carousel__controls__item.v-btn.v-btn--icon.v-btn--round.v-size--small {
+    color: var(--primary-color);
+}
+
+.heroCarousel.v-carousel .v-item-group .v-carousel__controls__item.v-btn.v-btn--icon.v-btn--round.v-size--small:before {
+    color: #fff;
+} */
+
+.v-slide-group__next {
+    /* background-color: var(--secondary-color);
+    height: 350px; */
+}
+
+
+.v-slide-group__prev i,
+.v-slide-group__next i {
+    color: var(--btn-bg-color) !important;
+}
+
 .v-application ul,
 .v-application ol {
     padding-left: 0 !important;
@@ -48,6 +67,67 @@ body {
     height: 100%;
     background: linear-gradient(rgba(31.5, 31.5, 31.5, 0.5),
             rgba(31.5, 31.5, 31.5, 0.84));
+}
+
+h3.back {
+    width: max-content;
+    padding-right: 10px;
+    cursor: pointer;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+h3.back span {
+    padding-top: 2px;
+}
+
+h3.back svg {
+    fill: var(--primary-color);
+    width: 20px;
+    height: 20px;
+}
+
+h3.back:hover {
+    color: var(--secondary-color);
+    transition: color 0.3s linear;
+}
+
+h3.back:hover svg {
+    fill: var(--secondary-color);
+    transition: color 0.3s linear;
+}
+
+.viewMoreContainer {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.viewMoreContainer p {
+    font-weight: 600;
+    font-size: 1.6rem;
+    text-transform: none;
+    margin: 0 !important;
+    color: var(--secondary-color);
+}
+
+.viewMoreContainer svg {
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+    fill: var(--secondary-color);
+}
+
+.viewMoreContainer:hover p {
+    color: var(--primary-color);
+    transition: color 0.3s ease-in-out;
+}
+
+.viewMoreContainer:hover svg {
+    fill: var(--primary-color);
+    transition: color 0.3s ease-in-out;
 }
 
 .contentrow {
@@ -179,7 +259,8 @@ body {
     /* padding: 0 !important; */
 }
 
-.listingTab.v-tab:before {
+.listingTab.v-tab:before,
+.videoListingTab.v-tab:before {
     display: none !important;
 }
 

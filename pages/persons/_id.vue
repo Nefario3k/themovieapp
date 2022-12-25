@@ -2,7 +2,7 @@
   <div>
     <v-container>
       <v-row>
-        <div class="col-6 col-md-3 col-lg-3 col-xl-3">
+        <div class="col-12 col-md-3 col-lg-3 col-xl-3">
           <div class="imgContainer trending">
             <v-img
               v-if="person.profile_path && person.profile_path != null"
@@ -12,14 +12,20 @@
             <img v-else src="/images/poster.png" :alt="person.name" />
           </div>
         </div>
-        <div class="col-6 col-md-9 col-lg-9 col-xl-9">
+        <div class="col-12 col-md-9 col-lg-9 col-xl-9">
           <header style="color: #222" class="nameTitle">
             {{ person.name }}
           </header>
           <header class="miniTitle">Bio</header>
-          <!-- <pre style="color: #222" class="bioContainer"> -->
-          <p>{{ person.biography }}</p>
-          <!-- </pre> -->
+          <p style="color: #222" class="bioContainer">
+          <pre 
+            style="
+              word-break: break-word;
+              white-space: pre-wrap;
+              text-align: justify
+          ">{{ person.biography }}
+          </pre>
+          </p>
           <header class="miniTitle">Popularly known for</header>
           <VideoTabs title="known for" :movies="searchedResult" />
         </div>

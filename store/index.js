@@ -15,6 +15,8 @@ export const state = () => ({
     trailers: [],
     movieTrailers: [],
     seasonalTrailers: [],
+    allVideos: [],
+    reviews: [],
 })
 
 export const getters = {
@@ -300,6 +302,31 @@ export const actions = {
             console.log(err)
         }
     },
+    async allVideos({ commit }, data) {
+        // https://api.themoviedb.org/3/tv/119051/videos?api_key=575e447d3c3e2de9aa3104d937ebb4f1&language=en-US
+
+        // https://api.themoviedb.org/3/movie/436270/videos?api_key=575e447d3c3e2de9aa3104d937ebb4f1&language=en-US
+        try {
+            await this.$axios.get(
+                `${data.media}/${data.id}/videos?api_key=${data.key}&languagae=${data.lang}`).then((res) => {
+                    commit('setAllVideos', res.data.results)
+                })
+
+
+        } catch (err) {
+            console.log(err)
+        }
+    },
+    async reviews({ commit }, data) {
+        try {
+            await this.$axios.get(`${data.media}/${data.id}/reviews?api_key=${data.key}&language=${data.lang}&page=${data.page}`).then((res) => {
+                commit('setReviews', res.data.results)
+                return res.data.results
+            })
+        } catch (err) {
+            console.log(err.message)
+        }
+    },
 }
 
 export const mutations = {
@@ -350,5 +377,11 @@ export const mutations = {
     },
     setSeasonalTrailers(state, seasonalTrailers) {
         state.seasonalTrailers = seasonalTrailers
+    },
+    setAllVideos(state, allVideos) {
+        state.allVideos = allVideos
+    },
+    setReviews(state, reviews) {
+        state.reviews = reviews
     },
 }

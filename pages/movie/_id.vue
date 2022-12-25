@@ -115,7 +115,19 @@
       <section id="bodyContent">
         <v-row class="contentrow">
           <div class="col-12 col-sm-9 col-md-9 col-lg-9 col-xl-9 leftPath">
-            <CastTabs :castData="castData.cast" :title="castData.title" />
+            <CastTabs
+              :castData="castData.cast"
+              :title="castData.title"
+              :castLinkParam="videoTypeOf[0]"
+            />
+            <v-container>
+              <Reviews />
+              <SeriesVideoSlides
+                v-if="gotTired != ''"
+                :data="gotTired"
+                v-on:playVideo="showModal"
+              />
+            </v-container>
           </div>
           <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 righPath">
             wdwdwd
@@ -142,23 +154,31 @@ export default {
         title: "Meet The Cast",
         cast: [],
       },
+      allVids: {},
+      gotTired: "",
     };
   },
   async mounted() {
+    let requestParams = {
+      media: this.videoTypeOf[0],
+      id: this.$route.params.id,
+      key: this.accessKey,
+      lang: this.lang,
+      page: 1,
+    };
     // get single video data
     const data = await this.$axios.get(
-      `${this.videoTypeOf[0]}/${this.$route.params.movieId}?api_key=${this.accessKey}&languagae=${this.lang}`
+      `${this.videoTypeOf[0]}/${this.$route.params.id}?api_key=${this.accessKey}&languagae=${this.lang}`
     );
+    await this.$store.dispatch("reviews", requestParams);
+    await this.$getReviews();
+
     // set video data
     const result = await data;
-
-    // get video urls
-    const videoData = await this.$axios.get(
-      `${this.videoTypeOf[0]}/${result.data.id}/videos?api_key=${this.accessKey}&languagae=${this.lang}`
-    );
-
+    await this.$store.dispatch("allVideos", requestParams);
+    await this.$getAllVideos();
     // set video url data
-    const vR = await videoData.data.results;
+    const vR = await await this.$getAllVideos();
     // iteriate through data and get the first trailer
     let indexedItem = [];
     vR.forEach((videos, index) => {
@@ -222,7 +242,44 @@ export default {
         this.vipCrew.push(element);
       });
     }
-    this.castData.cast = cast.data.cast.slice(0, 10);
+    this.castData.cast = cast.data.cast;
+    // arrange videos
+    let allTrailer = [];
+    let allTeaser = [];
+    let allClips = [];
+    let allBts = [];
+    this.$getAllVideos().forEach((element) => {
+      switch (element.type) {
+        case "Trailer":
+          allTrailer.push(element);
+          break;
+        case "Behind the Scenes":
+          allBts.push(element);
+          break;
+        case "Clip":
+          allClips.push(element);
+          break;
+        case "Teaser":
+          allTeaser.push(element);
+          break;
+        default:
+          break;
+      }
+    });
+    if (allTrailer.length) {
+      Object.assign(this.allVids, { trailer: allTrailer });
+    }
+    if (allTeaser.length) {
+      Object.assign(this.allVids, { teaser: allTeaser });
+    }
+    if (allClips.length) {
+      Object.assign(this.allVids, { clips: allClips });
+    }
+    if (allBts.length) {
+      Object.assign(this.allVids, { bts: allBts });
+    }
+    this.gotTired = this.allVids;
+    console.log(this.gotTired);
   },
   methods: {
     showModal(data) {

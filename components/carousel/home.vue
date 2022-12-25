@@ -8,6 +8,7 @@
       cycle="cycle"
       :show-arrows-on-hover="true"
       v-if="title != 'seasonal'"
+      class="heroCarousel"
     >
       <v-carousel-item
         v-for="(item, index) in $getTrailers()"

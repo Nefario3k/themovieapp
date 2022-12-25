@@ -21,7 +21,10 @@
               style="width: 250px; padding-left: 0"
             >
               <div class="flex_down">
-                <div class="relative imgContainer">
+                <div
+                  class="relative imgContainer"
+                  :class="{ trending: !item.overview }"
+                >
                   <img
                     v-if="item.poster_path && item.poster_path != null"
                     :src="imageLink + imgSize + item.poster_path"
@@ -37,7 +40,7 @@
                     {{ refactorRatings(item.vote_average) }}
                   </div>
                   <!-- over view  -->
-                  <div class="absolute overview">
+                  <div v-if="item.overview" class="absolute overview">
                     {{ item.overview.slice(0, 200) }}
                     <span v-if="item.overview.length > 200">...</span>
                     <nuxt-link :to="`/movie/${item.id}`">Read more</nuxt-link>
@@ -91,7 +94,10 @@
             >
               <!-- movies  -->
               <div v-if="item.media_type == 'movie'" class="flex_down">
-                <div class="relative imgContainer">
+                <div
+                  class="relative imgContainer"
+                  :class="{ trending: !item.overview }"
+                >
                   <img
                     v-if="item.poster_path && item.poster_path != null"
                     :src="imageLink + imgSize + item.poster_path"
@@ -107,7 +113,7 @@
                     {{ refactorRatings(item.vote_average) }}
                   </div>
                   <!-- over view  -->
-                  <div class="absolute overview">
+                  <div v-if="item.overview" class="absolute overview">
                     {{ item.overview.slice(0, 200) }}
                     <span v-if="item.overview.length > 200">...</span>
                     <nuxt-link :to="`/movie/${item.id}`">Read more</nuxt-link>
@@ -130,7 +136,10 @@
               </div>
               <!-- series  -->
               <div v-if="item.media_type == 'tv'" class="flex_down">
-                <div class="relative imgContainer">
+                <div
+                  class="relative imgContainer"
+                  :class="{ trending: !item.overview }"
+                >
                   <img
                     v-if="item.poster_path == '' && item.poster_path == null"
                     src="/images/poster.png"
@@ -146,7 +155,7 @@
                     {{ refactorRatings(item.vote_average) }}
                   </div>
                   <!-- over view  -->
-                  <div class="absolute overview">
+                  <div v-if="item.overview" class="absolute overview">
                     {{ item.overview.slice(0, 200) }}
                     <span v-if="item.overview.length > 200">...</span>
                     <nuxt-link :to="`/seasonal/${item.id}`"
