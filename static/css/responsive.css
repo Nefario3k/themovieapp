@@ -81,6 +81,19 @@ body .dark,
     transition: all 0.5s linear;
 }
 
+@media (max-width: 1040px) {
+    .img_large_container {
+        height: calc(100vh - 20vh) !important;
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+
+}
+
 @media (max-width: 959px) {
 
     .contentInfoWrapper .contentRow .content_container .hero_content .content_columns header.content_title,
@@ -114,6 +127,11 @@ body .dark,
 
     .imgContainer.persons {
         width: 30%;
+    }
+
+    .img_header p {
+        font-size: 1.4rem !important;
+        padding: 0 10px 5px !important;
     }
 }
 
@@ -200,6 +218,20 @@ body .dark,
 
     .hamburger {
         display: block !important;
+    }
+
+    .img_large_container iframe {
+        height: calc(100% - 30vh) !important;
+    }
+
+    .img_header {
+        justify-content: flex-start !important;
+        padding: 0 !important;
+    }
+
+    .img_header p {
+        width: 80%;
+        padding: 0 !important;
     }
 
 }

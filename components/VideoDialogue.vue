@@ -13,13 +13,13 @@
       <v-row style="margin: 0 !important">
         <div class="col-12 relative">
           <div class="img_header">
-            <p class="goldText">Images</p>
+            <p class="goldText">{{ videoData.name }}</p>
           </div>
           <div class="closeNavBtn">
             <svg
               @click="closeModal()"
-              width="40"
-              height="40"
+              width="35"
+              height="35"
               viewBox="0 0 50 50"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -90,8 +90,8 @@ export default {
   padding: 0px 21px 13px;
   p {
     padding: 0 30px 5px;
-    border-bottom: 2px solid var(--primary-color);
-    color: var(--primary-color);
+    border-bottom: 2px solid #fff;
+    color: #fff;
     font-weight: 700;
     font-size: 1.8rem;
     margin: 0;
