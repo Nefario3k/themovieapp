@@ -10,29 +10,41 @@
     class="topNav"
   >
     <div class="topBarNav d-flex align-items-center" style="color: #fff">
-      <div class="leftNav">
+      <div class="leftNav rightNav">
         <nav>
           <ul>
             <li>
-              <nuxt-link to="/">Home</nuxt-link>
+              <nuxt-link :class="{ scrolled: color != 'transparent' }" to="/"
+                >Home</nuxt-link
+              >
             </li>
             <li>
-              <nuxt-link to="/movie">Movies</nuxt-link>
+              <nuxt-link
+                :class="{ scrolled: color != 'transparent' }"
+                to="/movie"
+                >Movies</nuxt-link
+              >
             </li>
             <li>
-              <nuxt-link to="/seasonal">Tv Shows</nuxt-link>
+              <nuxt-link
+                :class="{ scrolled: color != 'transparent' }"
+                to="/seasonal"
+                >Tv Shows</nuxt-link
+              >
             </li>
           </ul>
         </nav>
-      </div>
-      <div class="rightNav">
-        <!-- :action="`/search?query=${searchInput}`" -->
         <form
           class="relative"
           :action="`/search?query=${searchInput}&page=1`"
           method="POST"
         >
-          <input required type="text" name="" v-model="searchInput" />
+          <input
+            :class="{ scrolled: color != 'transparent' }"
+            type="text"
+            name=""
+            v-model="searchInput"
+          />
           <div @click="search()" class="absolute search_ico">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
               <!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
@@ -54,6 +66,48 @@
             </svg>
           </div>
         </form>
+      </div>
+      <div
+        class="rightNav mobile"
+        style="display: flex; justify-content: flex-end"
+      >
+        <form
+          class="relative"
+          :action="`/search?query=${searchInput}&page=1`"
+          method="POST"
+        >
+          <input
+            :class="{ scrolled: color != 'transparent' }"
+            type="text"
+            name=""
+            v-model="searchInput"
+          />
+          <div @click="search()" class="absolute search_ico">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+              <path
+                d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"
+              />
+            </svg>
+          </div>
+          <div
+            @click="searchInput = ''"
+            v-if="searchInput"
+            class="absolute cancel_ico"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+              <!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+              <path
+                d="M310.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L160 210.7 54.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L114.7 256 9.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 301.3 265.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L205.3 256 310.6 150.6z"
+              />
+            </svg>
+          </div>
+        </form>
+        <v-app-bar-nav-icon
+          class="hamburger"
+          color="#fff"
+          @click="$emit('showModal')"
+        ></v-app-bar-nav-icon>
       </div>
     </div>
   </v-app-bar>
@@ -81,19 +135,13 @@ export default {
     }
   },
   methods: {
-    async search() {
-      this.$router.replace({ path: "/search?query=" + this.searchInput });
-      let searchParams = [
-        this.videoTypeOf[0],
-        this.videoTypeOf[1],
-        this.accessKey,
-        this.lang,
-        this.searchInput,
-        this.page,
-        this.include_adult,
-      ];
-      await this.$store.dispatch("startSearch", searchParams);
-      await this.$getSearchResult();
+    search() {
+      this.$router.push({
+        path: "/search?query=" + this.searchInput + "&page=" + 1,
+      });
+    },
+    showModal(type) {
+      this.$refs.mobileNavigation.showNavBar();
     },
   },
 };
@@ -107,6 +155,9 @@ export default {
   .leftNav {
     display: flex;
     align-items: center;
+    form {
+      display: none;
+    }
     gap: 43px;
     nav ul {
       display: flex;
@@ -123,9 +174,13 @@ export default {
         border-color: var(--secondary-color);
         cursor: pointer;
         &:hover {
-          color: var(--primary-color);
+          color: var(--secondary-color);
           transition: all 0.2s linear;
-          border-bottom: 2px solid var(--primary-color);
+          border-bottom: 2px solid var(--secondary-color) !important;
+        }
+        &.scrolled:hover {
+          color: var(--primary-color) !important;
+          border-color: var(--primary-color) !important;
         }
         &.nuxt-link-active.nuxt-link-exact-active {
           border-bottom: 2px solid #fff;
@@ -143,6 +198,10 @@ export default {
         padding: 0 30px 0 40px;
         outline: none;
         color: #fff;
+        &.scrolled {
+          border-color: #fff;
+          transition: all 0.3s linear;
+        }
       }
       .search_ico {
         left: 10px;
@@ -175,5 +234,8 @@ export default {
       }
     }
   }
+}
+.hamburger {
+  display: none;
 }
 </style>

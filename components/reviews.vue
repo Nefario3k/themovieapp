@@ -1,6 +1,7 @@
 <template>
-  <div v-if="$getReviews().length">
+  <div>
     <header class="reviewHeader">Reviews</header>
+    <div v-if="$getReviews().length">
     <v-card v-for="(item, index) in $getReviews().slice(0, 7)" :key="index" class="review_card">
       <v-list>
           <v-list-item class="reviewList">
@@ -86,6 +87,8 @@
           </v-list-item>
       </v-list>
     </v-card>
+    </div>
+     <div v-else class="flex_all_center noMedia">Not yet reviewed!</div>
   </div>
 </template>
 
@@ -115,7 +118,7 @@ export default {
 <style lang="scss" scoped>
 .reviewHeader {
   font-size: 2.2rem;
-  color: var(--secondary-color);
+  color: var(--text-color);
   margin-bottom: 10px;
   font-weight: 600;
 }
@@ -132,10 +135,10 @@ export default {
       .v-list-item__title {
         font-size: 2rem;
         font-weight: 600;
-        color: var(--secondary-color);
+        color: var(--text-color);
         a {
           text-decoration: none;
-          color: var(--secondary-color);
+          color: var(--text-color);
           &:hover {
             color: var(--primary-color);
             transition: color 0.3s linear;
@@ -155,8 +158,9 @@ export default {
       }
     }
     .colored {
-      background: var(--secondary-color);
+      background: var(--text-color);
       color: #fff;
+      font-weight: 600;
       width: 100%;
       height: 100%;
     }
@@ -165,7 +169,7 @@ export default {
       p {
         font-size: 1.4rem;
         font-weight: 400;
-        color: var(--secondary-color);
+        color: var(--text-color);
         line-height: 20px;
         min-height: 3.5rem;
         margin: 0;
@@ -194,5 +198,9 @@ export default {
       margin-bottom: 15px;
     }
   }
+}
+.noMedia {
+  height: 125px;
+  color: var(--text-color);
 }
 </style>

@@ -2,8 +2,13 @@
   <div>
     <header class="reviewHeader">Media</header>
 
-    <v-card class="review_card">
-      <v-tabs v-model="tabs" color="var(--primary-color)" right>
+    <v-card v-if="Object.keys(data).length" class="review_card">
+      <v-tabs
+        :show-arrows="false"
+        v-model="tabs"
+        color="var(--primary-color)"
+        right
+      >
         <v-tab class="allVideoTags" :ripple="false" v-show="data.trailer"
           >Trailers (<span v-if="data.trailer"> {{ data.trailer.length }} </span
           >)</v-tab
@@ -110,6 +115,7 @@
         </div>
       </div>
     </v-card>
+    <div v-else class="flex_all_center noMedia">No available media!</div>
   </div>
 </template>
 
@@ -127,7 +133,7 @@ export default {
 <style lang="scss" scoped>
 .reviewHeader {
   font-size: 2.2rem;
-  color: var(--secondary-color);
+  color: var(--text-color);
   margin-bottom: 10px;
   font-weight: 600;
 }
@@ -135,6 +141,13 @@ export default {
   font-size: 1.2rem;
   font-weight: 600;
   text-transform: none;
+  color: var(--text-color);
+}
+.theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active),
+.theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active) > .v-icon,
+.theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active) > .v-btn,
+.theme--light.v-tabs > .v-tabs-bar .v-tab--disabled {
+  color: var(--text-color);
 }
 
 .videoListingTab {
@@ -217,6 +230,10 @@ export default {
   overflow-x: auto;
   overscroll-behavior-inline: contain;
 }
+.noMedia {
+  height: 125px;
+  color: var(--text-color);
+}
 // .media_scroller {
 //   display: flex;
 //   flex-wrap: wrap;
@@ -249,7 +266,7 @@ export default {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: var(--secondary-color);
+  background: var(--text-color);
   border-radius: 10px;
 }
 

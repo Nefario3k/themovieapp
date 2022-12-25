@@ -1,9 +1,9 @@
 <template>
   <div>
-    <v-container>
-      <v-row>
+    <v-container v-if="Object.keys(person).length">
+      <v-row style="margin: 0">
         <div class="col-12 col-md-3 col-lg-3 col-xl-3">
-          <div class="imgContainer trending">
+          <div class="imgContainer trending persons">
             <v-img
               v-if="person.profile_path && person.profile_path != null"
               :src="imageLink + imgSize + person.profile_path"
@@ -13,11 +13,11 @@
           </div>
         </div>
         <div class="col-12 col-md-9 col-lg-9 col-xl-9">
-          <header style="color: #222" class="nameTitle">
+          <header class="nameTitle">
             {{ person.name }}
           </header>
-          <header class="miniTitle">Bio</header>
-          <p style="color: #222" class="bioContainer">
+          <header v-if="person.biography" class="miniTitle">Bio</header>
+          <p v-if="person.biography" class="bioContainer">
           <pre 
             style="
               word-break: break-word;
@@ -26,17 +26,19 @@
           ">{{ person.biography }}
           </pre>
           </p>
-          <header class="miniTitle">Popularly known for</header>
+          <header v-if="searchedResult.length" class="miniTitle">Popularly known for</header>
           <VideoTabs title="known for" :movies="searchedResult" />
         </div>
       </v-row>
     </v-container>
+    <div v-else>
+      <Loading />
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  layout: "search",
   data() {
     return {
       imageLink: process.env.API_BASE_IMAGE,
@@ -82,4 +84,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+header.nameTitle {
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 3.5rem;
+  margin-bottom: 10px;
+}
+header.miniTitle {
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+p.bioContainer {
+  margin-bottom: 0 !important;
+  color: var(--text-color);
+  font-weight: 400;
+  font-size: 1.6rem;
+  pre {
+    line-height: normal;
+  }
+}
 </style>

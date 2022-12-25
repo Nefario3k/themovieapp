@@ -18,7 +18,7 @@
       >
         <v-container class="contentInfoWrapper">
           <v-row class="contentRow">
-            <div class="col-3 poster">
+            <div class="col-3 poster flex_all_center">
               <img
                 v-if="item.poster_path && item.poster_path != null"
                 :src="imageLink + imgSize + item.poster_path"
@@ -61,24 +61,15 @@
                   <div class="ratings_wrapper">
                     <span class="bold">Overview: </span>
                     <br />
-                    <span>{{ item.overview }}</span>
-
-                    <!-- <v-list-item
-                    :three-line="true"
-                    style="padding-left: 0; padding-top: 0"
-                  >
-                    <v-list-item-content style="padding-top: 0">
-                      <v-list-item-title
-                        ><span class="bold">Overview: </span></v-list-item-title
-                      >
-                      <v-list-item-subtitle style="line-height: 20px">
-                        <span>{{ item.overview }}</span>
-                      </v-list-item-subtitle>
-                      <v-list-item-subtitle>
-          consectetur adipiscing elit.
-        </v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item> -->
+                    <span>{{ item.overview.slice(0, 250) }}</span
+                    ><span v-if="item.overview.length > 250"
+                      >...
+                      <nuxt-link
+                        :to="`/movie/${item.id}`"
+                        style="text-decoration: none; color: #fff"
+                        >Read more</nuxt-link
+                      ></span
+                    >
                   </div>
                 </div>
                 <div>
@@ -164,7 +155,15 @@
                   <div class="ratings_wrapper">
                     <span class="bold">Overview: </span>
                     <br />
-                    <span>{{ item.overview }}</span>
+                    <span>{{ item.overview.slice(0, 250) }}</span
+                    ><span v-if="item.overview.length > 250"
+                      >...
+                      <nuxt-link
+                        :to="`/seasonal/${item.id}`"
+                        style="text-decoration: none; color: #fff"
+                        >Read more</nuxt-link
+                      ></span
+                    >
                   </div>
                 </div>
                 <div>

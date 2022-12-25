@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div id="search">
     <v-container>
-      <v-row style="margin-bottom: 25px">
+      <v-row style="margin: 0 0 25px 0">
         <div class="col-12">
           <header>
             You searched for:
@@ -11,13 +11,28 @@
           </header>
         </div>
         <div
-          v-for="(item, index) in searchedResult"
-          :key="index"
-          class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3"
+          class="col-12"
+          v-if="loader"
+          style="height: calc(100vh - 270px); overflow: hidden"
         >
-          <SingleBlock :searched="item" />
+          <LoadingTwo />
         </div>
+        <template v-if="searchedResult.length && !loader">
+          <div
+            v-for="(item, index) in searchedResult"
+            :key="index"
+            class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3"
+          >
+            <SingleBlock :searched="item" />
+          </div>
+        </template>
       </v-row>
+      <div
+        v-if="!searchedResult.length && !loader"
+        class="nocontent flex_all_center"
+      >
+        <span>Nothing matches your search!!</span>
+      </div>
       <div
         v-if="$getSearchCount() > 1 && searchedResult.length"
         class="pagination_container"
@@ -36,7 +51,6 @@
 
 <script>
 export default {
-  layout: "search",
   props: ["searchedTitle"],
   data() {
     return {
@@ -47,6 +61,7 @@ export default {
       page: 1,
       include_adult: false,
       searchedResult: [],
+      loader: true,
     };
   },
   async mounted() {
@@ -64,6 +79,7 @@ export default {
     ];
     await this.$store.dispatch("startSearch", searchParams);
     this.searchedResult = await this.$getSearchResult();
+    this.loader = false;
     await this.$getSearchCount();
   },
   methods: {
@@ -78,11 +94,13 @@ export default {
         this.include_adult,
       ];
       this.searchedResult = [];
+      this.loader = true;
       await this.$store.dispatch("startSearch", searchParams);
       this.searchedResult = await this.$getSearchResult();
+      this.loader = false;
 
       this.$router.push({
-        path: "/search?query=" + this.searchedValue + "&page=" + this.page,
+        path: "/search/#?query=" + this.searchedValue + "&page=" + this.page,
       });
     },
   },
@@ -90,4 +108,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.nocontent {
+  color: var(--text-color);
+  font-weight: 600;
+  height: 300px;
+  span {
+    opacity: 0.5;
+    font-style: italic;
+  }
+}
 </style>

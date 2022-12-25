@@ -101,7 +101,6 @@
 
 <script>
 export default {
-  layout: "search",
   data() {
     return {
       data: [],
@@ -142,7 +141,7 @@ export default {
   h3 {
     margin-bottom: 15px;
     font-weight: 600;
-    color: var(--secondary-color);
+    color: var(--text-color);
     span {
       opacity: 0.5;
     }
@@ -154,7 +153,7 @@ export default {
     margin-bottom: 15px;
     a {
       text-decoration: none;
-      color: var(--secondary-color);
+      color: var(--text-color);
       &.profileImg {
         border-radius: 8px;
         overflow: hidden;
@@ -162,7 +161,7 @@ export default {
         width: 120px;
         background-position: top center;
         background-size: cover;
-        background-color: var(--secondary-color);
+        background-color: var(--text-color);
         &.small {
           background-size: 75%;
           background-position: center;
@@ -193,7 +192,7 @@ export default {
     }
     span {
       font-size: 1.4rem;
-      color: var(--secondary-color);
+      color: var(--text-color);
     }
     .flex_down {
       p {
@@ -203,7 +202,7 @@ export default {
   }
   p.crewTitle {
     font-size: 2rem;
-    color: var(--secondary-color);
+    color: var(--text-color);
     font-weight: 600;
   }
 }

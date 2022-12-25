@@ -7,6 +7,7 @@
       </div>
       <div class="tab_wrapper">
         <v-tabs
+          hide-slider
           color="transparent"
           center-active
           :dark="false"
@@ -69,6 +70,7 @@
       </div>
       <div class="tab_wrapper">
         <v-tabs
+          hide-slider
           color="transparent"
           center-active
           :dark="false"

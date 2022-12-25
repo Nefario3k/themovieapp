@@ -16,7 +16,7 @@
         </div>
         <v-container class="containedHero relative">
           <v-row class="contentRow">
-            <div class="col-4 poster">
+            <div class="col-3 poster flex_all_center">
               <img
                 v-if="movie.poster_path && movie.poster_path != null"
                 :src="imageLink + imgSize + movie.poster_path"
@@ -26,7 +26,7 @@
             </div>
             <v-row
               class="
-                col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8
+                col-12 col-sm-9 col-md-9 col-lg-9 col-xl-9
                 content_container
               "
             >
@@ -56,7 +56,7 @@
                 </div>
                 <!-- overview  -->
                 <div class="content_columns content_ratings">
-                  <div class="ratings_wrapper">
+                  <div v-if="movie.overview" class="ratings_wrapper">
                     <span class="bold">Overview: </span>
                     <br />
                     <span>{{ movie.overview }}</span>
@@ -77,7 +77,7 @@
                   <div
                     v-for="(item, index) in vipCrew.slice(0, 6)"
                     :key="index"
-                    class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                    class="col-4"
                   >
                     <div class="content_columns content_ratings">
                       <div class="ratings_wrapper">
@@ -268,10 +268,12 @@ export default {
   .containedHero {
     display: flex;
     align-items: center;
-    height: 100%;
+    height: 100vh;
     .contentRow {
+      margin-top: 0;
       .content_container {
         align-items: center;
+        margin-top: 0;
         .hero_content {
           display: flex;
           flex-direction: column;

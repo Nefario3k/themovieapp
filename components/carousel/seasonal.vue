@@ -17,7 +17,7 @@
       >
         <v-container class="contentInfoWrapper">
           <v-row class="contentRow">
-            <div class="col-3 poster">
+            <div class="col-3 poster flex_all_center">
               <img
                 v-if="item.poster_path && item.poster_path != null"
                 :src="imageLink + imgSize + item.poster_path"
@@ -60,7 +60,15 @@
                   <div class="ratings_wrapper">
                     <span class="bold">Overview: </span>
                     <br />
-                    <span>{{ item.overview }}</span>
+                    <span>{{ item.overview.slice(0, 250) }}</span
+                    ><span v-if="item.overview.length > 250"
+                      >...
+                      <nuxt-link
+                        :to="`/seasonal/${item.id}`"
+                        style="text-decoration: none; color: #fff"
+                        >Read more</nuxt-link
+                      ></span
+                    >
                   </div>
                 </div>
                 <div>
