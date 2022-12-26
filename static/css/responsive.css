@@ -133,6 +133,22 @@ body .dark,
         font-size: 1.4rem !important;
         padding: 0 10px 5px !important;
     }
+
+    .tabBarContainer .tabHeader {
+        padding-left: 12px;
+    }
+
+    .listingTab.v-tab:first-child {
+        margin-left: 12px;
+    }
+
+    .listingTab.v-tab:last-child {
+        margin-right: 12px;
+    }
+
+    .topBarNav {
+        padding: 0 !important;
+    }
 }
 
 @media (max-width: 599px) {
@@ -185,10 +201,6 @@ body .dark,
 
     .media_scroller {
         grid-auto-columns: 100% !important;
-    }
-
-    .topBarNav {
-        padding: 0 !important;
     }
 
     .imgContainer.persons {

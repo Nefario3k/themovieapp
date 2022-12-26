@@ -102,19 +102,33 @@ export default (context, inject) => {
         return context.store.state.reviews;
     })
 
-    inject('getNowPlayingOthers', () => {
-        return context.store.state.nowPlayingOthers;
-    })
-
-    inject('getPopularOthers', () => {
-        return context.store.state.popularOthers;
-    })
-
-    inject('getTopRatedOthers', () => {
-        return context.store.state.topRatedOthers;
-    })
-
-    inject('getUpcomingOthers', () => {
-        return context.store.state.upcomingOthers;
+    inject('getMovieOthers', () => {
+        let extraMOvies = []
+        if (context.store.state.nowPlayingOthers.length) {
+            Object.assign(extraMOvies)
+            extraMOvies.push({
+                title: "Now Playing",
+                movies: context.store.state.nowPlayingOthers
+            })
+        }
+        if (context.store.state.popularOthers.length) {
+            extraMOvies.push({
+                title: "What's Popular",
+                movies: context.store.state.popularOthers
+            })
+        }
+        if (context.store.state.topRatedOthers.length) {
+            extraMOvies.push({
+                title: "Top Rated",
+                movies: context.store.state.topRatedOthers
+            })
+        }
+        if (context.store.state.upcomingOthers.length) {
+            extraMOvies.push({
+                title: "Upcoming Movies",
+                movies: context.store.state.upcomingOthers
+            })
+        }
+        return extraMOvies;
     })
 }

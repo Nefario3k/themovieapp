@@ -7,6 +7,7 @@
       v-for="(item, index) in videoContent"
       :key="index"
       :movies="item.movies"
+      :extraMovies="item.extraMovies"
       :title="item.title"
     />
   </div>
@@ -22,22 +23,27 @@ export default {
         {
           title: "Now Playing",
           movies: [],
+          extraMovies: [],
         },
         {
           title: "What's Popular",
           movies: [],
+          extraMovies: [],
         },
         {
           title: "Top Rated",
           movies: [],
+          extraMovies: [],
         },
         {
           title: "Upcoming Movies",
           movies: [],
+          extraMovies: [],
         },
         {
           title: "Trending",
           movies: [],
+          extraMovies: [],
         },
       ],
       videoTypeOf: ["movie", "trending"],
@@ -104,16 +110,26 @@ export default {
         this.videoContent[4].movies = await this.$getTrending();
       }
 
-      await this.$store.dispatch("nowPlayingOthers", requetParams);
-      await this.$store.dispatch("popularOthers", requetParams);
-
-      await this.$store.dispatch("topRatedOthers", requetParams);
-
-      await this.$store.dispatch("upcomingOthers", requetParams);
-      console.log(await this.$getNowPlayingOthers());
-      console.log(await this.$getPopularOthers());
-      console.log(await this.$getTopRatedOthers());
-      console.log(await this.$getUpcomingOthers());
+      // get others
+      if (!this.$getMovieOthers().length) {
+        await this.$store.dispatch("nowPlayingOthers", requetParams);
+        await this.$store.dispatch("popularOthers", requetParams);
+        await this.$store.dispatch("topRatedOthers", requetParams);
+        await this.$store.dispatch("upcomingOthers", requetParams);
+        await this.$getMovieOthers();
+        for (var i = 0; i < this.$getMovieOthers().length; i++) {
+          if (this.videoContent[i].title == this.$getMovieOthers()[i].title) {
+            this.videoContent[i].extraMovies = this.$getMovieOthers()[i].movies;
+          }
+        }
+      } else {
+        await this.$getMovieOthers();
+        for (var i = 0; i < this.$getMovieOthers().length; i++) {
+          if (this.videoContent[i].title == this.$getMovieOthers()[i].title) {
+            this.videoContent[i].extraMovies = this.$getMovieOthers()[i].movies;
+          }
+        }
+      }
     } catch (err) {
       console.log(err);
     }
