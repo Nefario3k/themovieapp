@@ -12,7 +12,7 @@
     <!-- <v-footer :absolute="!fixed" app>
       <Footer />
     </v-footer> -->
-    <Footer />
+    <Footer style="overflow: hidden" />
   </v-app>
 </template>
 

@@ -5,6 +5,7 @@
         <div class="col-12 col-md-3 col-lg-3 col-xl-3">
           <div class="imgContainer trending persons">
             <v-img
+            style="border-radius: 16px"
               v-if="person.profile_path && person.profile_path != null"
               :src="imageLink + imgSize + person.profile_path"
               :alt="person.original_title"

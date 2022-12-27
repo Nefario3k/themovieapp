@@ -70,6 +70,22 @@
                     <span class="bold">{{ movie.tagline }} </span>
                   </div>
                 </div>
+                <!-- Release date  -->
+                <div
+                  v-if="movie.release_date"
+                  class="content_columns content_ratings"
+                >
+                  <div class="ratings_wrapper">
+                    <span class="bold">Released: </span>
+                    <span>{{
+                      new Date(movie.release_date).toLocaleString("en-us", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                      })
+                    }}</span>
+                  </div>
+                </div>
                 <!-- overview  -->
                 <div
                   v-if="movie.overview"

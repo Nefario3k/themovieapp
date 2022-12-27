@@ -4,6 +4,7 @@
       <CarouselHome :sliderContent="sliderContent" title="movie" />
     </section>
     <VideoTabs
+      style="overflow: hidden"
       v-for="(item, index) in videoContent"
       :key="index"
       :movies="item.movies"
@@ -129,6 +130,14 @@ export default {
             this.videoContent[i].extraMovies = this.$getMovieOthers()[i].movies;
           }
         }
+      }
+      if (this.$getTrendingAll().length < 3) {
+        await this.$store.dispatch("trendingMovies", trendingParams);
+        await this.$store.dispatch("trendingSeries", trendingParams);
+        await this.$store.dispatch("trendingPersons", trendingParams);
+        await this.$getTrendingAll();
+      } else {
+        await this.$getTrendingAll();
       }
     } catch (err) {
       console.log(err);

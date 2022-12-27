@@ -7,6 +7,7 @@
       v-for="(item, index) in videoContent"
       :key="index"
       :movies="item.movies"
+      :extraMovies="item.extraMovies"
       :title="item.title"
     />
   </div>
@@ -20,18 +21,22 @@ export default {
         {
           title: "What's Popular",
           movies: [],
+          extraMovies: [],
         },
         {
           title: "Top Rated",
           movies: [],
+          extraMovies: [],
         },
         {
           title: "On The Air",
           movies: [],
+          extraMovies: [],
         },
         {
           title: "Trending",
           movies: [],
+          extraMovies: [],
         },
       ],
       videoTypeOf: ["tv", "trending"],
@@ -88,6 +93,32 @@ export default {
         this.videoContent[3].movies = await this.$getTrendingSeries();
       } else {
         this.videoContent[3].movies = await this.$getTrendingSeries();
+      }
+
+      // get others
+      if (!this.$getSeriesOthers().length) {
+        await this.$store.dispatch("popularOtherSeries", requetParams);
+
+        await this.$store.dispatch("topRatedOtherSeries", requetParams);
+
+        await this.$store.dispatch("onTheAirOthers", requetParams);
+
+        await this.$getSeriesOthers();
+
+        for (var i = 0; i < this.$getSeriesOthers().length; i++) {
+          if (this.videoContent[i].title == this.$getSeriesOthers()[i].title) {
+            this.videoContent[i].extraMovies =
+              this.$getSeriesOthers()[i].movies;
+          }
+        }
+      } else {
+        await this.$getSeriesOthers();
+        for (var i = 0; i < this.$getSeriesOthers().length; i++) {
+          if (this.videoContent[i].title == this.$getSeriesOthers()[i].title) {
+            this.videoContent[i].extraMovies =
+              this.$getSeriesOthers()[i].movies;
+          }
+        }
       }
     } catch (err) {
       console.log(err);

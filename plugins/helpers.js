@@ -48,6 +48,10 @@ export default (context, inject) => {
         return context.store.state.trending;
     })
 
+    inject('getTrendingMovies', () => {
+        return context.store.state.trendingMovies;
+    })
+
     inject('getTrendingSeries', () => {
         return context.store.state.trendingSeries;
     })
@@ -130,5 +134,74 @@ export default (context, inject) => {
             })
         }
         return extraMOvies;
+    })
+
+    // to lazy so implemented this fix 
+    inject('getMoviesOthers', () => {
+        let extraMOvies = []
+        if (context.store.state.upcomingOthers.length) {
+            extraMOvies.push({
+                title: "Upcoming Movies",
+                movies: context.store.state.upcomingOthers
+            })
+        }
+
+        if (context.store.state.nowPlayingOthers.length) {
+            Object.assign(extraMOvies)
+            extraMOvies.push({
+                title: "Now Playing",
+                movies: context.store.state.nowPlayingOthers
+            })
+        }
+        if (context.store.state.popularOthers.length) {
+            extraMOvies.push({
+                title: "What's Popular",
+                movies: context.store.state.popularOthers
+            })
+        }
+        if (context.store.state.topRatedOthers.length) {
+            extraMOvies.push({
+                title: "Top Rated",
+                movies: context.store.state.topRatedOthers
+            })
+        }
+        return extraMOvies;
+    })
+
+    inject('getSeriesOthers', () => {
+        let extraMOvies = []
+        if (context.store.state.popularOtherSeries.length) {
+            extraMOvies.push({
+                title: "What's Popular",
+                movies: context.store.state.popularOtherSeries
+            })
+        }
+        if (context.store.state.topRatedOtherSeries.length) {
+            extraMOvies.push({
+                title: "Top Rated",
+                movies: context.store.state.topRatedOtherSeries
+            })
+        }
+        if (context.store.state.onTheAirOthers.length) {
+            extraMOvies.push({
+                title: "On The Air",
+                movies: context.store.state.onTheAirOthers
+            })
+        }
+        return extraMOvies;
+    })
+
+    inject('getTrendingAll', () => {
+        let extraTrend = []
+        if (context.store.state.trendingMovies.length) {
+            extraTrend.push(context.store.state.trendingMovies)
+        }
+        if (context.store.state.trendingSeries.length) {
+            extraTrend.push(context.store.state.trendingSeries)
+        }
+        if (context.store.state.trendingPersons.length) {
+            extraTrend.push(context.store.state.trendingPersons)
+        }
+        return extraTrend
     })
 }

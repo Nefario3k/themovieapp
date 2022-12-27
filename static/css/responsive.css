@@ -138,11 +138,11 @@ body .dark,
         padding-left: 12px;
     }
 
-    .listingTab.v-tab:first-child {
+    .listingTab.personTab.v-tab:first-child {
         margin-left: 12px;
     }
 
-    .listingTab.v-tab:last-child {
+    .listingTab.personTab.v-tab:last-child {
         margin-right: 12px;
     }
 

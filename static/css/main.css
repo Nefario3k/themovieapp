@@ -308,7 +308,7 @@ h3.back:hover svg {
 }
 
 .imgContainer .overview a:hover {
-    color: var(--btn-bg-color);
+    color: var(--primary-color);
 }
 
 .imgContainer img {
@@ -341,11 +341,11 @@ h3.back:hover svg {
     /* padding: 0 !important; */
 }
 
-.listingTab.v-tab:first-child {
+.listingTab.personTab.v-tab:first-child {
     margin-left: 52px;
 }
 
-.listingTab.v-tab:last-child {
+.listingTab.personTab.v-tab:last-child {
     margin-right: 52px;
 }
 
@@ -387,4 +387,37 @@ h3.back:hover svg {
     width: 70%;
     margin: 0 auto;
     margin-bottom: 15px;
+}
+
+.Btns {
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 150px !important;
+    height: 3.5rem !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
+.Btns span {
+    font-size: 1.1rem;
+    text-transform: none;
+    font-weight: 600;
+}
+
+.Btns svg {
+    margin: 0;
+}
+
+.itemsListing .itemsList {
+    color: var(--text-color);
+    font-weight: 600;
+    font-size: 1.4rem;
+}
+
+.itemsListing:hover {
+    background-color: var(--svg-color);
+}
+
+.itemsListing:hover .itemsList {
+    color: #fff;
 }
