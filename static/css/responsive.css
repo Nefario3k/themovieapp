@@ -134,6 +134,7 @@ body .dark,
         padding: 0 10px 5px !important;
     }
 
+    .tabBarContainer .tabHeader.similar,
     .tabBarContainer .tabHeader {
         padding-left: 12px;
     }
@@ -148,6 +149,24 @@ body .dark,
 
     .topBarNav {
         padding: 0 !important;
+    }
+
+    .seasonList .listWrapper>a {
+        display: none;
+    }
+
+    .seasonList .listWrapper>div {
+        width: 100%;
+        padding: 12px;
+    }
+
+    .seasonList .listWrapper>div p {
+        font-size: 1.4rem;
+    }
+
+    .seasonList .listWrapper>div>span {
+        font-size: 1.4rem;
+        line-height: 20px;
     }
 }
 
@@ -251,6 +270,10 @@ body .dark,
 @media (max-width: 430px) {
     #heroSection .containedHero .contentRow .content_container {
         margin-top: 0 !important;
+    }
+
+    #heroSection .containedHero .contentRow .content_container.seasons {
+        margin-top: 70px !important;
     }
 
     .imgContainer.persons {

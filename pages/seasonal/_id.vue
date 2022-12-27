@@ -54,6 +54,18 @@
                     >
                   </div>
                 </div>
+                <!-- tagline  -->
+                <div
+                  v-if="movie.tagline"
+                  class="content_columns content_ratings"
+                >
+                  <div
+                    class="ratings_wrapper"
+                    style="opacity: 0.5; font-style: italic"
+                  >
+                    <span class="bold">{{ movie.tagline }} </span>
+                  </div>
+                </div>
                 <!-- overview  -->
                 <div class="content_columns content_ratings">
                   <div v-if="movie.overview" class="ratings_wrapper">
@@ -102,8 +114,12 @@
               :castLinkParam="videoTypeOf[2]"
             />
             <v-container>
+              <SeasonsList
+                :title="movie.name"
+                :list="movie.seasons[movie.seasons.length - 1]"
+              />
               <Reviews />
-              <SeriesVideoSlides
+              <VideoSlides
                 v-if="gotTired != ''"
                 :data="gotTired"
                 v-on:playVideo="showModal"
@@ -114,6 +130,12 @@
             wdwdwd
           </div>
         </v-row>
+        <SimilarSeries
+          style="overflow: hidden"
+          v-if="similarMovies.length"
+          :movies="similarMovies"
+          title="Similar Series"
+        />
       </section>
       <VideoDialogue ref="videoModal" />
     </div>
@@ -137,6 +159,7 @@ export default {
       },
       allVids: {},
       gotTired: "",
+      similarMovies: [],
     };
   },
   async mounted() {
@@ -186,6 +209,7 @@ export default {
       Object.assign(result.data, { color: "#bf1e22" });
     }
     this.movie = result.data;
+    console.log(this.movie);
     // get cast
     const cast = await this.$axios.get(
       `${this.videoTypeOf[1]}/${result.data.id}/credits?api_key=${this.accessKey}&languagae=${this.lang}`
@@ -252,6 +276,18 @@ export default {
       Object.assign(this.allVids, { bts: allBts });
     }
     this.gotTired = this.allVids;
+    // get similar videos
+    let similarVids = [];
+    for (var i = 1; i < 4; i++) {
+      await this.$axios
+        .get(
+          `${requestParams.media}/${requestParams.id}/similar?api_key=${requestParams.key}&languagae=${requestParams.lang}&page=${i}`
+        )
+        .then((res) => {
+          similarVids.push(res.data.results);
+        });
+    }
+    this.similarMovies = similarVids;
   },
   methods: {
     showModal(data) {

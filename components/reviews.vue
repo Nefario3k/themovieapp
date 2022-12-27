@@ -87,8 +87,10 @@
           </v-list-item>
       </v-list>
     </v-card>
+  
     </div>
      <div v-else class="flex_all_center noMedia">Not yet reviewed!</div>
+       <v-divider style="margin-bottom: 25px; margin-top: 25px"></v-divider>
   </div>
 </template>
 

@@ -322,12 +322,6 @@
                   </p>
                 </div>
               </div>
-              <!-- <v-img
-                    :src="imageLink + imgSize + item.poster_path"
-                    :alt="item.original_title"
-                    :contain="true"
-                    style=""
-                  ></v-img> -->
             </v-tab>
           </v-tabs>
           <!-- others  -->

@@ -138,7 +138,7 @@
             />
             <v-container>
               <Reviews />
-              <SeriesVideoSlides
+              <VideoSlides
                 v-if="gotTired != ''"
                 :data="gotTired"
                 v-on:playVideo="showModal"
@@ -149,6 +149,12 @@
             wdwdwd
           </div>
         </v-row>
+        <SimilarMovies
+          style="overflow: hidden"
+          v-if="similarMovies.length"
+          :movies="similarMovies"
+          title="Similar Movies"
+        />
       </section>
       <VideoDialogue ref="videoModal" />
     </div>
@@ -172,6 +178,7 @@ export default {
       },
       allVids: {},
       gotTired: "",
+      similarMovies: [],
     };
   },
   async mounted() {
@@ -191,7 +198,9 @@ export default {
 
     // set video data
     const result = await data;
+
     await this.$store.dispatch("allVideos", requestParams);
+
     await this.$getAllVideos();
     // set video url data
     const vR = await await this.$getAllVideos();
@@ -295,6 +304,19 @@ export default {
       Object.assign(this.allVids, { bts: allBts });
     }
     this.gotTired = this.allVids;
+
+    // get similar videos
+    let similarVids = [];
+    for (var i = 1; i < 4; i++) {
+      await this.$axios
+        .get(
+          `${requestParams.media}/${requestParams.id}/similar?api_key=${requestParams.key}&languagae=${requestParams.lang}&page=${i}`
+        )
+        .then((res) => {
+          similarVids.push(res.data.results);
+        });
+    }
+    this.similarMovies = similarVids;
   },
   methods: {
     showModal(data) {
