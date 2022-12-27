@@ -1,11 +1,11 @@
 <template>
   <div>
     <div v-if="castData.length" class="tabBarContainer">
-      <div class="tabHeader">
+      <div style="padding-left: 12px" class="tabHeader">
         <header>{{ title }}</header>
         <div class="lineUnder"></div>
       </div>
-      <div class="tab_wrapper">
+      <div style="padding-left: 12px" class="tab_wrapper">
         <v-tabs
           hide-slider
           color="transparent"

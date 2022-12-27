@@ -4,6 +4,7 @@
       <CarouselSeasonal title="seasonal" />
     </section>
     <SeriesVideoTab
+      style="overflow: hidden"
       v-for="(item, index) in videoContent"
       :key="index"
       :movies="item.movies"

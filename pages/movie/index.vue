@@ -4,6 +4,7 @@
       <CarouselMovie title="movie" />
     </section>
     <VideoTabs
+      style="overflow: hidden"
       v-for="(item, index) in videoContent"
       :key="index"
       :movies="item.movies"

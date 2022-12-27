@@ -31,6 +31,11 @@ body {
     width: 20px !important; */
 }
 
+.nothingLoaded {
+    margin-top: -60px;
+    background-color: var(--text-color);
+}
+
 /*
 .heroCarousel.v-carousel .v-item-group .v-carousel__controls__item.v-btn.v-btn--icon.v-btn--round.v-size--small:before {
     color: #fff;
@@ -521,4 +526,38 @@ h3.back:hover svg {
     line-height: normal;
     font-weight: 400;
     display: block;
+}
+
+.stats_for_nerds {
+    display: flex;
+    flex-direction: column;
+    gap: 23px;
+}
+
+.stats_for_nerds .reviewHeader {
+    margin: 15px 0;
+}
+
+.stats_for_nerds p.statTitle {
+    margin: 0 !important;
+    color: var(--text-color);
+    font-weight: 600;
+    font-size: 1.6rem;
+}
+
+.stats_for_nerds .statSub {
+    color: var(--text-color);
+    font-size: 1.4rem;
+}
+
+.stats_for_nerds .networkContainer img {
+    display: block;
+    padding: 0;
+    text-align: left;
+    margin: 0;
+    height: 100%;
+    /* width: 260px; */
+    max-width: 260px;
+    max-height: 30px;
+    margin-bottom: 10px;
 }

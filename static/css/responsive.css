@@ -25,6 +25,11 @@ body .dark,
     transition: all 0.3s ease-in-out;
 }
 
+.dark .nothingLoaded {
+    background: var(--bg-color);
+    transition: all 0.3s ease-in-out;
+}
+
 .dark .v-slide-group__prev i,
 .v-slide-group__next i {
     color: var(--text-color) !important;
@@ -152,6 +157,10 @@ body .dark,
     }
 
     .seasonList .listWrapper>a {
+        display: none;
+    }
+
+    .seasonList .listWrapper img {
         display: none;
     }
 

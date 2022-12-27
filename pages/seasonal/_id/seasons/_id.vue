@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Loading -->
-    <Loading v-if="!movie" />
+    <Loading v-if="!movie || !season" />
     <div v-else>
       <section id="heroSection" style="overflow: hidden" class="relative">
         <div class="absolute" style="height: 100%">
@@ -18,8 +18,8 @@
           <v-row class="contentRow">
             <div class="col-3 poster flex_all_center">
               <img
-                v-if="movie.poster_path && movie.poster_path != null"
-                :src="imageLink + imgSize + movie.poster_path"
+                v-if="season.poster_path && season.poster_path != null"
+                :src="imageLink + imgSize + season.poster_path"
                 :alt="movie.name"
               />
               <img v-else src="/images/poster.png" :alt="movie.name" />
@@ -34,21 +34,22 @@
               <div class="hero_content" style="gap: 0 !important">
                 <div class="content_columns content_ratings">
                   <nuxt-link
-                    :to="'/seasonal/' + $route.params.id"
+                    :to="
+                      '/seasonal/' +
+                      $route.query.query +
+                      '/seasons?query=' +
+                      $route.query.query
+                    "
                     class="ratings_wrapper"
                     style="opacity: 0.5; text-decoration: none"
                   >
-                    <span class="bold">←Back to main</span>
+                    <span class="bold">←Back to season list</span>
                   </nuxt-link>
                 </div>
                 <!-- header  -->
                 <div class="content_columns content_header">
                   <header class="content_title">
-                    {{ movie.name }} ({{
-                      new Date(movie.first_air_date).toLocaleString("en-us", {
-                        year: "numeric",
-                      })
-                    }})
+                    {{ movie.name }} ({{ season.name }})
                   </header>
                 </div>
                 <!-- tagline  -->
@@ -63,6 +64,18 @@
                     <span class="bold">{{ movie.tagline }} </span>
                   </div>
                 </div>
+                <!-- overview  -->
+                <div
+                  v-if="season.overview"
+                  style="margin-bottom: 25px"
+                  class="content_columns content_ratings"
+                >
+                  <div class="ratings_wrapper">
+                    <span class="bold">Overview: </span>
+                    <br />
+                    <span>{{ season.overview }}</span>
+                  </div>
+                </div>
               </div>
             </v-row>
           </v-row>
@@ -70,9 +83,10 @@
       </section>
       <section id="bodyContent" tyle="overflow: hidden">
         <v-container>
-          <SeasonsList
-            v-for="(item, index) in movie.seasons"
+          <SeasonsEpisodeList
+            v-for="(item, index) in season.episodes"
             :key="index"
+            :itemNumber="index"
             :title="movie.name"
             :list="item"
           />
@@ -87,6 +101,7 @@ export default {
   data() {
     return {
       movie: "",
+      season: "",
       accessKey: process.env.API_BASE_KEY,
       lang: "en-US",
       imageLink: process.env.API_BASE_IMAGE,
@@ -96,10 +111,15 @@ export default {
   async mounted() {
     // get single video data
     const data = await this.$axios.get(
-      `tv/${this.$route.params.id}?api_key=${this.accessKey}&languagae=${this.lang}`
+      `tv/${this.$route.query.query}?api_key=${this.accessKey}&languagae=${this.lang}`
+    );
+
+    const seriesData = await this.$axios.get(
+      `tv/${this.$route.query.query}/season/${this.$route.params.id}?api_key=${this.accessKey}&languagae=${this.lang}`
     );
     const result = await data;
     this.movie = result.data;
+    this.season = seriesData.data;
   },
 };
 </script>

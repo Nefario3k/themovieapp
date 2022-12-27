@@ -114,6 +114,11 @@
               :castLinkParam="videoTypeOf[2]"
             />
             <v-container>
+              <v-divider style="margin: 15px 0 25px"></v-divider>
+              <header v-if="movie.status != 'Ended'" class="reviewHeader">
+                Current Season
+              </header>
+              <header v-else class="reviewHeader">Last Season</header>
               <SeasonsList
                 :title="movie.name"
                 :list="movie.seasons[movie.seasons.length - 1]"
@@ -127,7 +132,42 @@
             </v-container>
           </div>
           <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 righPath">
-            wdwdwd
+            <div class="stats_for_nerds">
+              <header class="reviewHeader">Stats For Nerds</header>
+              <!-- runtime  -->
+              <div v-if="movie.episode_run_time.length">
+                <p class="statTitle">Average Runtime</p>
+                <span class="statSub">
+                  {{ movie.episode_run_time[1] }}m -
+                  {{ movie.episode_run_time[0] }}m</span
+                >
+              </div>
+              <!-- seasons  -->
+              <div>
+                <p class="statTitle">Seasons</p>
+                <span class="statSub">{{ movie.number_of_seasons }}</span>
+              </div>
+              <!-- episodes  -->
+              <div>
+                <p class="statTitle">Episodes</p>
+                <span class="statSub">{{ movie.number_of_seasons }}</span>
+              </div>
+              <!-- networks  -->
+              <div v-if="movie.networks.length">
+                <p class="statTitle">Networks</p>
+                <div
+                  v-for="(item, index) in movie.networks"
+                  :key="index"
+                  class="networkContainer"
+                >
+                  <img
+                    v-if="item && item != null"
+                    :src="imageLink + imgSize + item.logo_path"
+                    :alt="item.name"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </v-row>
         <SimilarSeries
@@ -369,5 +409,11 @@ export default {
       }
     }
   }
+}
+.reviewHeader {
+  font-size: 2rem;
+  color: var(--text-color);
+  margin-bottom: 25px;
+  font-weight: 600;
 }
 </style>

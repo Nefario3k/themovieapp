@@ -2,7 +2,25 @@
   <div class="seasonContainer">
     <v-card class="seasonList">
       <div class="listWrapper">
-        <nuxt-link to="">
+        <nuxt-link
+          :to="`/seasonal/${$route.params.id}/seasons/${list.season_number}?query=${$route.params.id}`"
+          v-if="!$route.path.includes('/seasons/')"
+        >
+          <img
+            v-if="list.poster_path && list.poster_path != null"
+            :src="imageLink + imgSize + list.poster_path"
+            :alt="`${title} poster`"
+          />
+          <img
+            v-else
+            src="/images/poster.png"
+            :alt="`${title} has no poster image`"
+          />
+        </nuxt-link>
+        <nuxt-link
+          :to="`/seasonal/${$route.query.query}/seasons/${list.season_number}?query=${$route.query.query}`"
+          v-else
+        >
           <img
             v-if="list.poster_path && list.poster_path != null"
             :src="imageLink + imgSize + list.poster_path"
@@ -16,7 +34,17 @@
         </nuxt-link>
         <div>
           <header>
-            <nuxt-link to="">{{ list.name }}</nuxt-link>
+            <nuxt-link
+              v-if="!$route.path.includes('/seasons/')"
+              :to="`/seasonal/${$route.params.id}/seasons/${list.season_number}?query=${$route.params.id}`"
+              >{{ list.name }}</nuxt-link
+            >
+            <!-- else  -->
+            <nuxt-link
+              v-else
+              :to="`/seasonal/${$route.query.query}/seasons/${list.season_number}?query=${$route.query.query}`"
+              >{{ list.name }}</nuxt-link
+            >
           </header>
           <p>
             {{
@@ -43,8 +71,9 @@
         </div>
       </div>
     </v-card>
-    <p v-if="!$route.path.includes('/seasons/')">
-      <nuxt-link :to="`/seasonal/seasons/${$route.params.id}`"
+    <p v-if="!$route.path.includes('/seasons')">
+      <nuxt-link
+        :to="`/seasonal/${$route.params.id}/seasons?query=${$route.params.id}`"
         >View all seasons</nuxt-link
       >
     </p>

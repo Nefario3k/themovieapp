@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <div class="nothingLoaded" v-if="!videoContent[0].movies.length">
+    <Loading />
+  </div>
+  <div v-else>
     <section id="heroSection">
       <CarouselHome :sliderContent="sliderContent" title="movie" />
     </section>
