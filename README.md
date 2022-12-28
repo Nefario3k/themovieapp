@@ -68,6 +68,8 @@ The project is made to be responsive on all viewport but one thing that i desire
 
 - [Nuxt.js](https://nuxtjs.org) - This (if your not familar with), is a javascript framework built on another javascript frameworks and helps build amazing websites and webapps a lot faster than using raw javascript.
 
+- [Tmdb](https://www.themoviedb.org) - This app was built using public api's prepared and designed by The Movie DB (TMDB). Create an account and get an api key allowing one to go through their easy to read and understand documentation.
+
 - [Google Fonts](https://fonts.google.com) - Need fonts, check this out! find almost any font on the web, download or import or link it wirth your projects.
 
 ## Author
