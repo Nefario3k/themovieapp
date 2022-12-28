@@ -407,6 +407,12 @@ export default {
       }
     });
 
+    // get watchproviders
+    // const watchProvider = await this.$axios.get(
+    //   `${requestParams.media}/${requestParams.id}/watch/providers?api_key=${requestParams.key}`
+    // );
+    // console.log(watchProvider.data);
+
     //   reset vote average due to it coming back from the api as a long numerical decimal
     result.data.vote_average = Math.ceil(result.data.vote_average * 10);
     if (result.data.vote_average >= 75) {

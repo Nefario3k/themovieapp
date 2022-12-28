@@ -354,6 +354,10 @@ h3.back:hover svg {
     margin-left: 52px;
 }
 
+.listingTab.similar.v-tab:first-child {
+    margin-left: 24px;
+}
+
 .listingTab.personTab.v-tab:last-child {
     margin-right: 52px;
 }

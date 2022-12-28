@@ -149,9 +149,11 @@ export default {
   },
   methods: {
     search() {
-      this.$router.push({
-        path: "/search?query=" + this.searchInput + "&page=" + 1,
-      });
+      if (this.searchInput) {
+        this.$router.push({
+          path: "/search?query=" + this.searchInput + "&page=" + 1,
+        });
+      }
     },
     showModal(type) {
       this.$refs.mobileNavigation.showNavBar();

@@ -148,6 +148,10 @@ body .dark,
         margin-left: 12px;
     }
 
+    .listingTab.similar.v-tab:first-child {
+        margin-left: 12px;
+    }
+
     .listingTab.personTab.v-tab:last-child {
         margin-right: 12px;
     }

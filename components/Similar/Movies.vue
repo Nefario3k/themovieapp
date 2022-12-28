@@ -26,7 +26,7 @@
             :ripple="false"
             v-for="(item, index) in movies[page - 1]"
             :key="index"
-            class="listingTab personTab"
+            class="listingTab similar"
             style="width: 250px; padding-left: 0"
           >
             <div class="flex_down">
