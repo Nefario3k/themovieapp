@@ -1,7 +1,11 @@
 <template>
   <v-app dark :class="{ dark: dark }">
     <SearchBar
-      v-if="$route.path.includes('/persons') || $route.path.includes('/search')"
+      v-if="
+        $route.path.includes('/persons') ||
+        $route.path.includes('/search') ||
+        $route.path.includes('/credit/')
+      "
       v-on:showModal="showModal"
     />
     <TopBar v-else v-on:showModal="showModal" />
@@ -17,6 +21,12 @@
 </template>
 
 <script>
+import AOS from "aos";
+import "aos/dist/aos.css";
+AOS.init({
+  offset: 90,
+  once: true,
+});
 export default {
   name: "DefaultLayout",
   data() {

@@ -1,4 +1,6 @@
 import colors from 'vuetify/es5/util/colors'
+import AOS from "aos";
+
 
 export default {
   ssr: false,

@@ -131,8 +131,15 @@
               />
             </v-container>
           </div>
-          <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 righPath">
-            <div class="stats_for_nerds">
+          <div
+            style="overflow: hidden"
+            class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 righPath"
+          >
+            <div
+              data-aos="fade-left"
+              data-aos-duration="500"
+              class="stats_for_nerds"
+            >
               <header class="reviewHeader" style="margin-bottom: 0">
                 Stats For Nerds
               </header>
@@ -334,12 +341,16 @@
           </div>
         </v-row>
         <RecommendSeries
+          data-aos="fade-up"
+          data-aos-duration="500"
           style="overflow: hidden"
           v-if="recommended.length"
           :movies="recommended"
           title="Recommended"
         />
         <SimilarSeries
+          data-aos="fade-up"
+          data-aos-duration="500"
           style="overflow: hidden"
           v-if="similarMovies.length"
           :movies="similarMovies"

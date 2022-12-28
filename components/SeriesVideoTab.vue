@@ -14,7 +14,7 @@
           ></v-pagination>
         </div>
       </div>
-      <div class="tab_wrapper">
+      <div data-aos="fade-up" data-aos-duration="500" class="tab_wrapper">
         <v-tabs
           v-if="page == 1"
           hide-slider
@@ -132,7 +132,7 @@
         <header>{{ title }}</header>
         <div class="lineUnder"></div>
       </div>
-      <div class="tab_wrapper">
+      <div data-aos="fade-up" data-aos-duration="500" class="tab_wrapper">
         <v-tabs
           hide-slider
           color="transparent"

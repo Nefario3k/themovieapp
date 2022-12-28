@@ -189,9 +189,9 @@ export default {
         border-color: var(--secondary-color);
         cursor: pointer;
         &:hover {
-          color: var(--secondary-color);
+          color: var(--primary-color);
           transition: all 0.2s linear;
-          border-bottom: 2px solid var(--secondary-color) !important;
+          border-bottom: 2px solid var(--primary-color) !important;
         }
         &.scrolled:hover {
           color: var(--primary-color) !important;
@@ -199,6 +199,7 @@ export default {
         }
         &.nuxt-link-active.nuxt-link-exact-active {
           border-bottom: 2px solid #fff;
+          border-color: var(--primary-color) !important;
         }
       }
     }

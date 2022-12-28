@@ -15,7 +15,7 @@
             ></v-pagination>
           </div>
         </div>
-        <div class="tab_wrapper">
+        <div data-aos="fade-up" data-aos-duration="500" class="tab_wrapper">
           <v-tabs
             v-if="page == 1"
             hide-slider
@@ -190,7 +190,7 @@
             </v-menu>
           </div>
         </div>
-        <div class="tab_wrapper">
+        <div data-aos="fade-up" data-aos-duration="500" class="tab_wrapper">
           <!-- all  -->
           <v-tabs
             v-if="currentTrend == items[0].title"
@@ -468,7 +468,7 @@
     </div>
     <div v-if="title == 'known for'">
       <div v-if="movies.length" class="tabBarContainer">
-        <div class="tab_wrapper">
+        <div data-aos="fade-up" data-aos-duration="500" class="tab_wrapper">
           <v-tabs
             hide-slider
             color="transparent"

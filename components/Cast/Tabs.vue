@@ -1,6 +1,11 @@
 <template>
   <div>
-    <div v-if="castData.length" class="tabBarContainer">
+    <div
+      data-aos="fade-up"
+      data-aos-duration="500"
+      v-if="castData.length"
+      class="tabBarContainer"
+    >
       <div style="padding-left: 12px" class="tabHeader">
         <header>{{ title }}</header>
         <div class="lineUnder"></div>
