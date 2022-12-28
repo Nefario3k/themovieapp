@@ -3,11 +3,11 @@
     <!-- Loading -->
     <Loading v-if="!movie" />
     <div v-else>
-      <section id="heroSection" style="overflow: hidden" class="relative">
+      <section id="heroSection" class="relative">
         <div class="absolute" style="height: 100%">
           <v-img
             v-if="movie.backdrop_path"
-            :alt="movie.name"
+            :alt="movie.original_title"
             :gradient="`rgba(31.5, 31.5, 31.5, 0.5), rgba(31.5, 31.5, 31.5, 0.84)`"
             :src="imageLink + imgSize + movie.backdrop_path"
             style="width: 100vw; height: 100%"
@@ -20,9 +20,13 @@
               <img
                 v-if="movie.poster_path && movie.poster_path != null"
                 :src="imageLink + imgSize + movie.poster_path"
-                :alt="movie.name"
+                :alt="movie.original_title"
               />
-              <img v-else src="/images/poster.png" :alt="movie.name" />
+              <img
+                v-else
+                src="/images/poster.png"
+                :alt="movie.original_title"
+              />
             </div>
             <v-row
               class="
@@ -34,7 +38,7 @@
                 <!-- header  -->
                 <div class="content_columns content_header">
                   <header class="content_title">
-                    {{ movie.name }}
+                    {{ movie.original_title }}
                   </header>
                 </div>
                 <!-- ratings  -->
@@ -66,9 +70,28 @@
                     <span class="bold">{{ movie.tagline }} </span>
                   </div>
                 </div>
+                <!-- Release date  -->
+                <div
+                  v-if="movie.release_date"
+                  class="content_columns content_ratings"
+                >
+                  <div class="ratings_wrapper">
+                    <span class="bold">Released: </span>
+                    <span>{{
+                      new Date(movie.release_date).toLocaleString("en-us", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                      })
+                    }}</span>
+                  </div>
+                </div>
                 <!-- overview  -->
-                <div class="content_columns content_ratings">
-                  <div v-if="movie.overview" class="ratings_wrapper">
+                <div
+                  v-if="movie.overview"
+                  class="content_columns content_ratings"
+                >
+                  <div class="ratings_wrapper">
                     <span class="bold">Overview: </span>
                     <br />
                     <span>{{ movie.overview }}</span>
@@ -105,24 +128,15 @@
           </v-row>
         </v-container>
       </section>
-      <section id="bodyContent" tyle="overflow: hidden">
+      <section id="bodyContent">
         <v-row class="contentrow">
           <div class="col-12 col-sm-9 col-md-9 col-lg-9 col-xl-9 leftPath">
             <CastTabs
               :castData="castData.cast"
               :title="castData.title"
-              :castLinkParam="videoTypeOf[2]"
+              :castLinkParam="videoTypeOf[0]"
             />
             <v-container>
-              <v-divider style="margin: 15px 0 25px"></v-divider>
-              <header v-if="movie.status != 'Ended'" class="reviewHeader">
-                Current Season
-              </header>
-              <header v-else class="reviewHeader">Last Season</header>
-              <SeasonsList
-                :title="movie.name"
-                :list="movie.seasons[movie.seasons.length - 1]"
-              />
               <Reviews />
               <VideoSlides
                 v-if="gotTired != ''"
@@ -240,15 +254,30 @@
                   <span>Visit homepage</span>
                 </v-tooltip>
               </div>
-              <!-- runtime  -->
-              <div v-if="movie.episode_run_time.length">
-                <p class="statTitle">Average Runtime</p>
-                <span class="statSub">
-                  <span v-if="movie.episode_run_time[1]"
-                    >{{ movie.episode_run_time[1] }}m -</span
-                  >
-                  {{ movie.episode_run_time[0] }}m</span
+              <!-- budget  -->
+              <div v-if="movie.budget">
+                <p class="statTitle">Budget</p>
+                <span class="statSub" style="color: var(--primary-color)">
+                  {{ formatter(movie.budget) }}</span
                 >
+              </div>
+              <!-- revenue  -->
+              <div v-if="movie.revenue">
+                <p class="statTitle">Revenue</p>
+                <span class="statSub" style="color: var(--primary-color)">
+                  {{ formatter(movie.revenue) }}</span
+                >
+              </div>
+              <!-- runtime  -->
+              <div v-if="movie.runtime">
+                <p class="statTitle">Average Runtime</p>
+                <span v-if="movie.runtime > 60" class="statSub">
+                  <span
+                    >{{ CheckRuntime(movie.runtime).hr }}hr
+                    {{ CheckRuntime(movie.runtime).min }}m</span
+                  >
+                </span>
+                <span v-else class="statSub"> {{ movie.runtime }}m </span>
               </div>
               <!-- status  -->
               <div v-if="movie.status">
@@ -257,22 +286,12 @@
                   {{ movie.status }}</span
                 >
               </div>
-              <!-- type  -->
-              <div v-if="movie.type">
-                <p class="statTitle">Type</p>
-                <span class="statSub" style="color: var(--primary-color)">
-                  {{ movie.type }}</span
+              <!-- lang  -->
+              <div v-if="movie.original_language">
+                <p class="statTitle">Original Language</p>
+                <span class="statSub">
+                  {{ language(movie.original_language) }}</span
                 >
-              </div>
-              <!-- seasons  -->
-              <div v-if="movie.number_of_seasons">
-                <p class="statTitle">Seasons</p>
-                <span class="statSub">{{ movie.number_of_seasons }}</span>
-              </div>
-              <!-- episodes  -->
-              <div v-if="movie.number_of_seasons">
-                <p class="statTitle">Episodes</p>
-                <span class="statSub">{{ movie.number_of_episodes }}</span>
               </div>
               <!-- genre  -->
               <div v-if="movie.genres.length">
@@ -288,21 +307,6 @@
                 >
                   {{ item.name }}
                 </v-chip>
-              </div>
-              <!-- networks  -->
-              <div v-if="movie.networks.length">
-                <p class="statTitle">Networks</p>
-                <div
-                  v-for="(item, index) in movie.networks"
-                  :key="index"
-                  class="networkContainer"
-                >
-                  <img
-                    v-if="item && item != null"
-                    :src="imageLink + imgSize + item.logo_path"
-                    :alt="item.name"
-                  />
-                </div>
               </div>
               <!-- production  -->
               <div v-if="movie.production_companies.length">
@@ -333,17 +337,17 @@
             </div>
           </div>
         </v-row>
-        <RecommendSeries
+        <RecommendMovies
           style="overflow: hidden"
           v-if="recommended.length"
           :movies="recommended"
           title="Recommended"
         />
-        <SimilarSeries
+        <SimilarMovies
           style="overflow: hidden"
           v-if="similarMovies.length"
           :movies="similarMovies"
-          title="Similar Series"
+          title="Similar Movies"
         />
       </section>
       <VideoDialogue ref="videoModal" />
@@ -357,7 +361,7 @@ export default {
     return {
       movie: "",
       vipCrew: [],
-      videoTypeOf: ["movie", "tv", "seasonal"],
+      videoTypeOf: ["movie", "trending"],
       accessKey: process.env.API_BASE_KEY,
       lang: "en-US",
       imageLink: process.env.API_BASE_IMAGE,
@@ -375,7 +379,7 @@ export default {
   },
   async mounted() {
     let requestParams = {
-      media: this.videoTypeOf[1],
+      media: this.videoTypeOf[0],
       id: this.$route.params.id,
       key: this.accessKey,
       lang: this.lang,
@@ -383,7 +387,7 @@ export default {
     };
     // get single video data
     const data = await this.$axios.get(
-      `${this.videoTypeOf[1]}/${this.$route.params.id}?api_key=${this.accessKey}&languagae=${this.lang}`
+      `${this.videoTypeOf[0]}/${this.$route.params.id}?api_key=${this.accessKey}&languagae=${this.lang}`
     );
     await this.$store.dispatch("reviews", requestParams);
     await this.$getReviews();
@@ -391,11 +395,11 @@ export default {
     // set video data
     const result = await data;
 
-    // get video urls
     await this.$store.dispatch("allVideos", requestParams);
+
     await this.$getAllVideos();
     // set video url data
-    const vR = await this.$getAllVideos();
+    const vR = await await this.$getAllVideos();
     // iteriate through data and get the first trailer
     let indexedItem = [];
     vR.forEach((videos, index) => {
@@ -436,32 +440,34 @@ export default {
         title: "instagram",
         link: external_link.data.instagram_id,
       },
-      {
-        title: "freebase",
-        link: external_link.data.freebase_id,
-      },
     ];
     this.tvLinks = socials;
     // get cast
     const cast = await this.$axios.get(
-      `${this.videoTypeOf[1]}/${result.data.id}/credits?api_key=${this.accessKey}&languagae=${this.lang}`
+      `${this.videoTypeOf[0]}/${result.data.id}/credits?api_key=${this.accessKey}&languagae=${this.lang}`
     );
 
-    // get creators and character dev
-    let creators = [];
+    // get writers, directors and character dev
+    let directors = [];
     let characters = [];
+    let writers = [];
     cast.data.crew.forEach((element) => {
-      if (element.job == "Creator") {
-        creators.push(element);
+      if (element.job == "Director") {
+        directors.push(element);
       } else if (
         element.department == "Writing" &&
         element.job == "Characters"
       ) {
         characters.push(element);
+      } else if (
+        element.department == "Writing" &&
+        element.job != "Characters"
+      ) {
+        writers.push(element);
       }
     });
-    if (creators.length) {
-      creators.forEach((element) => {
+    if (directors.length) {
+      directors.forEach((element) => {
         this.vipCrew.push(element);
       });
     }
@@ -470,7 +476,11 @@ export default {
         this.vipCrew.push(element);
       });
     }
-    this.castData.cast = cast.data.cast;
+    if (writers.length) {
+      writers.forEach((element) => {
+        this.vipCrew.push(element);
+      });
+    }
     this.castData.cast = cast.data.cast;
     // arrange videos
     let allTrailer = [];
@@ -513,6 +523,7 @@ export default {
     const rec = await this.$axios.get(
       `${requestParams.media}/${requestParams.id}/recommendations?api_key=${requestParams.key}&languagae=${requestParams.lang}&page=1`
     );
+
     this.recommended = rec.data.results;
 
     // get similar videos
@@ -531,6 +542,30 @@ export default {
   methods: {
     showModal(data) {
       this.$refs.videoModal.showImgModal(data);
+    },
+    CheckRuntime(num) {
+      var value = num;
+      var hr = 0;
+      for (var i = 60; i < value; hr++) {
+        value = value - i;
+      }
+      return {
+        hr: hr,
+        min: value,
+      };
+    },
+    formatter(price) {
+      let format = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      });
+      return format.format(price);
+    },
+    language(lang) {
+      const languageNames = new Intl.DisplayNames(["en"], {
+        type: "language",
+      });
+      return languageNames.of(lang);
     },
   },
 };

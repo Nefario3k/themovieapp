@@ -6,7 +6,7 @@
         <ul class="">
           <!-- twitter  -->
           <li>
-            <v-tooltip top color="var(--secondary-color)">
+            <v-tooltip top color="var(--svg-color)">
               <template v-slot:activator="{ on, attrs }">
                 <a
                   href="https://twitter.com/daviesokpeta"
@@ -27,7 +27,7 @@
           </li>
           <!-- linkedn  -->
           <li>
-            <v-tooltip top color="var(--secondary-color)">
+            <v-tooltip top color="var(--svg-color)">
               <template v-slot:activator="{ on, attrs }">
                 <a
                   href="https://www.linkedin.com/in/davies-o-b60a801b0/"
@@ -48,7 +48,7 @@
           </li>
           <!-- github  -->
           <li>
-            <v-tooltip top color="var(--secondary-color)">
+            <v-tooltip top color="var(--svg-color)">
               <template v-slot:activator="{ on, attrs }">
                 <a
                   href="https://github.com/Nefario3k"
@@ -69,7 +69,7 @@
           </li>
           <!-- portfolio  -->
           <li>
-            <v-tooltip top color="var(--secondary-color)">
+            <v-tooltip top color="var(--svg-color)">
               <template v-slot:activator="{ on, attrs }">
                 <a
                   href="https://elastic-beaver-f2084f.netlify.app"
@@ -90,7 +90,7 @@
           </li>
           <!-- whatsapp  -->
           <li>
-            <v-tooltip top color="var(--secondary-color)">
+            <v-tooltip top color="var(--svg-color)">
               <template v-slot:activator="{ on, attrs }">
                 <a
                   href="https://wa.link/to0rh2"
@@ -111,7 +111,7 @@
           </li>
           <!-- email  -->
           <li>
-            <v-tooltip top color="var(--secondary-color)">
+            <v-tooltip top color="var(--svg-color)">
               <template v-slot:activator="{ on, attrs }">
                 <a
                   href="mailto:thenerfSenpai@gmail.com"
