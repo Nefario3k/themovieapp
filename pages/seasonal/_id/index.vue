@@ -550,6 +550,24 @@ export default {
       this.$refs.videoModal.showImgModal(data);
     },
   },
+  head() {
+    return {
+      title: this.movie.name + " - Latest Streaming Movies And series info",
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content:
+            "Get all the latest streaming movies and series in theaters and online",
+        },
+        {
+          hid: "keywords",
+          name: "keywords",
+          content: "movies, streaming, stream, tv series",
+        },
+      ],
+    };
+  },
 };
 </script>
 

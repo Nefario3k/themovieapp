@@ -121,6 +121,24 @@ export default {
     this.movie = result.data;
     this.season = seriesData.data;
   },
+  head() {
+    return {
+      title: this.season.name + " - " + this.movie.name,
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content:
+            "Get all the latest streaming movies and series in theaters and online",
+        },
+        {
+          hid: "keywords",
+          name: "keywords",
+          content: "movies, streaming, stream, tv series",
+        },
+      ],
+    };
+  },
 };
 </script>
 

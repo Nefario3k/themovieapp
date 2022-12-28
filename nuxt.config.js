@@ -4,6 +4,10 @@ import AOS from "aos";
 
 export default {
   ssr: false,
+  target: 'static',
+  router: {
+    base: '/themovieapp/'
+  },
   server: {
     port: process.env.PORT || 3000
   },

@@ -101,6 +101,24 @@ export default {
     const result = await data;
     this.movie = result.data;
   },
+  head() {
+    return {
+      title: this.movie.name + " - Seasons",
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content:
+            "Get all the latest streaming movies and series in theaters and online",
+        },
+        {
+          hid: "keywords",
+          name: "keywords",
+          content: "movies, streaming, stream, tv series",
+        },
+      ],
+    };
+  },
 };
 </script>
 

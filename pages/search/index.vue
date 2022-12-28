@@ -3,8 +3,8 @@
     <v-container>
       <v-row style="margin: 0 0 25px 0">
         <div class="col-12">
-          <header>
-            You searched for:
+          <header class="header">
+            You searched for :
             <span style="font-style: italic; font-weight: 600">{{
               searchedValue
             }}</span>
@@ -51,7 +51,6 @@
 
 <script>
 export default {
-  props: ["searchedTitle"],
   data() {
     return {
       searchedValue: "",
@@ -104,6 +103,24 @@ export default {
       });
     },
   },
+  head() {
+    return {
+      title: this.$route.query.query.toUpperCase() + " - search",
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content:
+            "Get all the latest streaming movies and series in theaters and online",
+        },
+        {
+          hid: "keywords",
+          name: "keywords",
+          content: "movies, streaming, stream, tv series",
+        },
+      ],
+    };
+  },
 };
 </script>
 
@@ -116,5 +133,9 @@ export default {
     opacity: 0.5;
     font-style: italic;
   }
+}
+.header {
+  color: var(--text-color);
+  font-size: 2rem;
 }
 </style>

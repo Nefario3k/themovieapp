@@ -579,6 +579,26 @@ export default {
       return languageNames.of(lang);
     },
   },
+  head() {
+    return {
+      title:
+        this.movie.original_title +
+        " - Latest Streaming Movies And series info",
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content:
+            "Get all the latest streaming movies and series in theaters and online",
+        },
+        {
+          hid: "keywords",
+          name: "keywords",
+          content: "movies, streaming, stream, tv series",
+        },
+      ],
+    };
+  },
 };
 </script>
 
