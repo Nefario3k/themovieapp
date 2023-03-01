@@ -74,6 +74,6 @@ The project is made to be responsive on all viewport but one thing that i desire
 
 ## Author
 
-- Davies Okpeta - [@Nefario3k](https://elastic-beaver-f2084f.netlify.app)
+- Davies Okpeta - [@Nefario3k](https://nefario3k.github.io/Nefario3k/)
 
 - [To top](#overview)<br />
