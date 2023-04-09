@@ -3,11 +3,11 @@ import colors from 'vuetify/es5/util/colors'
 
 
 export default {
-  // ssr: false,
+  ssr: false,
   target: 'static',
-  // router: {
-  //   base: '/themovieapp/'
-  // },
+  router: {
+    base: '/themovieapp/'
+  },
   server: {
     port: process.env.PORT || 3000
   },
