@@ -22,7 +22,7 @@
                   </svg>
                 </a>
               </template>
-              <span>My Twitter</span>
+              <span>Twitter handle</span>
             </v-tooltip>
           </li>
           <!-- linkedn  -->
@@ -43,7 +43,7 @@
                   </svg>
                 </a>
               </template>
-              <span>My Linkedn profile</span>
+              <span>Linkedn profile</span>
             </v-tooltip>
           </li>
           <!-- github  -->
@@ -64,7 +64,7 @@
                   </svg>
                 </a>
               </template>
-              <span>My Github profile</span>
+              <span>Github profile</span>
             </v-tooltip>
           </li>
           <!-- portfolio  -->
@@ -72,7 +72,7 @@
             <v-tooltip top color="var(--svg-color)">
               <template v-slot:activator="{ on, attrs }">
                 <a
-                  href="https://elastic-beaver-f2084f.netlify.app"
+                  href="https://nefario3k.github.io/portfolio/"
                   target="_blank"
                   v-bind="attrs"
                   v-on="on"
@@ -85,7 +85,7 @@
                   </svg>
                 </a>
               </template>
-              <span>My Portfolio</span>
+              <span>Portfolio</span>
             </v-tooltip>
           </li>
           <!-- whatsapp  -->
