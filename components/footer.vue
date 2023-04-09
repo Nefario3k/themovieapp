@@ -171,6 +171,7 @@ export default {};
           svg {
             width: 20px;
             fill: var(--text-color);
+            transition: all 0.2s linear;
           }
           &:hover {
             svg {
