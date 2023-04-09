@@ -3,16 +3,18 @@
     <!-- movies  -->
     <div v-if="searched.media_type == 'movie'" class="mainContainer flex_down">
       <div class="relative imgContainer">
-        <v-img
-          v-if="
-            searched.poster_path != '' &&
-            searched.poster_path != null &&
-            searched.poster_path
-          "
-          :src="imageLink + imgSize + searched.poster_path"
-          :alt="searched.original_title"
-        ></v-img>
-        <img v-else src="/images/poster.png" :alt="searched.original_title" />
+        <nuxt-link :to="`/movie/${searched.id}`">
+          <v-img
+            v-if="
+              searched.poster_path != '' &&
+              searched.poster_path != null &&
+              searched.poster_path
+            "
+            :src="imageLink + imgSize + searched.poster_path"
+            :alt="searched.original_title"
+          ></v-img>
+          <img v-else src="/images/poster.png" :alt="searched.original_title" />
+        </nuxt-link>
         <!-- ratings  -->
         <div class="absolute flex_all_center video_ratings">
           {{ refactorRatings(searched.vote_average) }}
@@ -42,12 +44,14 @@
     <!-- seasons  -->
     <div v-if="searched.media_type == 'tv'" class="mainContainer flex_down">
       <div class="relative imgContainer">
-        <v-img
-          v-if="searched.poster_path != '' && searched.poster_path != null"
-          :src="imageLink + imgSize + searched.poster_path"
-          :alt="searched.name"
-        ></v-img>
-        <img v-else src="/images/poster.png" :alt="searched.name" />
+        <nuxt-link :to="`/seasonal/${searched.id}`">
+          <v-img
+            v-if="searched.poster_path != '' && searched.poster_path != null"
+            :src="imageLink + imgSize + searched.poster_path"
+            :alt="searched.name"
+          ></v-img>
+          <img v-else src="/images/poster.png" :alt="searched.name" />
+        </nuxt-link>
         <!-- ratings  -->
         <div class="absolute flex_all_center video_ratings">
           {{ refactorRatings(searched.vote_average) }}
@@ -77,12 +81,14 @@
     <!-- persons  -->
     <div v-if="searched.media_type == 'person'" class="mainContainer flex_down">
       <div class="relative imgContainer trending">
-        <v-img
-          v-if="searched.profile_path != '' && searched.profile_path != null"
-          :src="imageLink + imgSize + searched.profile_path"
-          :alt="searched.name"
-        ></v-img>
-        <img v-else src="/images/poster.png" :alt="searched.name" />
+        <nuxt-link :to="`/persons/${searched.id}`">
+          <v-img
+            v-if="searched.profile_path != '' && searched.profile_path != null"
+            :src="imageLink + imgSize + searched.profile_path"
+            :alt="searched.name"
+          ></v-img>
+          <img v-else src="/images/poster.png" :alt="searched.name" />
+        </nuxt-link>
         <!-- ratings  -->
         <div class="absolute flex_all_center video_ratings">
           {{ refactorRatings(searched.popularity) }}

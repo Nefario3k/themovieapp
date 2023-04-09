@@ -12,6 +12,7 @@ export default {};
 .loading {
   height: 100%;
   width: 100%;
+  min-height: 300px;
   display: flex;
   justify-content: center;
   align-items: center;

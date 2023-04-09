@@ -297,4 +297,15 @@ body .dark,
         width: 100%;
     }
 
+    .tabBarContainer .tabHeader {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .tabBarContainer .tabHeader .pagination_container_videos {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+    }
+
 }

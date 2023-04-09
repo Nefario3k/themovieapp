@@ -3,7 +3,7 @@
     <v-container v-if="Object.keys(person).length">
       <v-row style="margin: 0">
         <div class="col-12 col-md-3 col-lg-3 col-xl-3">
-          <div class="imgContainer trending persons">
+          <div style="height: max-content" class="imgContainer trending persons">
             <v-img
             style="border-radius: 16px"
               v-if="person.profile_path && person.profile_path != null"

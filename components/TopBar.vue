@@ -34,14 +34,11 @@
             </li>
           </ul>
         </nav>
-        <form
-          class="relative"
-          :action="`/search?query=${searchInput}&page=1`"
-          method="POST"
-        >
+        <form class="relative" @submit.prevent="search">
           <input
             :class="{ scrolled: color != 'transparent' }"
             type="text"
+            required
             name=""
             v-model="searchInput"
           />
@@ -71,15 +68,12 @@
         class="rightNav mobile"
         style="display: flex; justify-content: flex-end"
       >
-        <form
-          class="relative"
-          :action="`/search?query=${searchInput}&page=1`"
-          method="POST"
-        >
+        <form class="relative" @submit.prevent="search">
           <input
             :class="{ scrolled: color != 'transparent' }"
             type="text"
             name=""
+            required
             v-model="searchInput"
           />
           <div @click="search()" class="absolute search_ico">
@@ -151,7 +145,8 @@ export default {
     search() {
       if (this.searchInput) {
         this.$router.push({
-          path: "/search?query=" + this.searchInput + "&page=" + 1,
+          path: `/search?query=${this.searchInput}&page=1`,
+          replace: false,
         });
       }
     },

@@ -192,16 +192,22 @@ export default (context, inject) => {
     })
 
     inject('getTrendingAll', () => {
-        let extraTrend = []
+        let trendObj = {}
         if (context.store.state.trendingMovies.length) {
-            extraTrend.push(context.store.state.trendingMovies)
+            if (!trendObj.hasOwnProperty('movie')) {
+                Object.assign(trendObj, { movie: context.store.state.trendingMovies })
+            }
         }
         if (context.store.state.trendingSeries.length) {
-            extraTrend.push(context.store.state.trendingSeries)
+            if (!trendObj.hasOwnProperty('tv')) {
+                Object.assign(trendObj, { tv: context.store.state.trendingSeries })
+            }
         }
         if (context.store.state.trendingPersons.length) {
-            extraTrend.push(context.store.state.trendingPersons)
+            if (!trendObj.hasOwnProperty('persons')) {
+                Object.assign(trendObj, { persons: context.store.state.trendingPersons })
+            }
         }
-        return extraTrend
+        return trendObj
     })
 }

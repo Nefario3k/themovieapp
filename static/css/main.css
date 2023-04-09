@@ -243,7 +243,7 @@ h3.back:hover svg {
 }
 
 .pagination_container_videos .v-pagination li:has(button.v-pagination__navigation) {
-    display: none !important;
+    /* display: none !important; */
 }
 
 .tabBarContainer .tabHeader header {
@@ -310,6 +310,7 @@ h3.back:hover svg {
     transform: translateY(100%);
     transition: 0.3s ease-in-out all;
     border-radius: 0 0 16px 16px;
+    transition: all 0.5s ease-in-out;
 }
 
 .imgContainer .overview a {
@@ -325,6 +326,12 @@ h3.back:hover svg {
     height: 100%;
     object-fit: cover;
     border-radius: 16px;
+    /* cursor: pointer; */
+    transition: all 0.5s ease-in-out;
+}
+
+.imgContainer .v-image__image--cover {
+    transition: all 0.5s ease-in-out;
 }
 
 .imgContainer:hover img,
@@ -337,10 +344,12 @@ h3.back:hover svg {
 .imgContainer.trending:hover img,
 .imgContainer.trending:hover .v-image__image--cover {
     filter: none !important;
+    transition: all 0.5s ease-in-out;
 }
 
 .imgContainer:hover .overview {
     transform: translateY(0);
+    transition: all 0.5s ease-in-out;
 }
 
 .listingTab.v-tab {
@@ -432,6 +441,14 @@ h3.back:hover svg {
 }
 
 .itemsListing:hover .itemsList {
+    color: #fff;
+}
+
+.itemsListing.active {
+    background-color: var(--svg-color);
+}
+
+.itemsListing.active .itemsList {
     color: #fff;
 }
 
@@ -582,4 +599,8 @@ h3.back:hover svg {
     width: 30px;
     height: 30px;
     fill: var(--text-color);
+}
+
+.capital {
+    text-transform: capitalize;
 }

@@ -1,8 +1,8 @@
 <template>
   <div>
     <!-- Loading -->
-    <Loading v-if="!movie" />
-    <div v-else>
+    <Loading v-show="!movie.hasOwnProperty('adult')" />
+    <div v-show="movie.hasOwnProperty('adult')">
       <section id="heroSection" style="overflow: hidden" class="relative">
         <div class="absolute" style="height: 100%">
           <v-img
@@ -25,10 +25,7 @@
               <img v-else src="/images/poster.png" :alt="movie.name" />
             </div>
             <v-row
-              class="
-                col-12 col-sm-9 col-md-9 col-lg-9 col-xl-9
-                content_container
-              "
+              class="col-12 col-sm-9 col-md-9 col-lg-9 col-xl-9 content_container"
             >
               <div class="hero_content">
                 <!-- header  -->
@@ -111,7 +108,7 @@
             <CastTabs
               :castData="castData.cast"
               :title="castData.title"
-              :castLinkParam="videoTypeOf[2]"
+              castLinkParam="seasonal"
             />
             <v-container>
               <v-divider style="margin: 15px 0 25px"></v-divider>
@@ -120,6 +117,7 @@
               </header>
               <header v-else class="reviewHeader">Last Season</header>
               <SeasonsList
+                v-if="movie.seasons"
                 :title="movie.name"
                 :list="movie.seasons[movie.seasons.length - 1]"
               />
@@ -248,7 +246,7 @@
                 </v-tooltip>
               </div>
               <!-- runtime  -->
-              <div v-if="movie.episode_run_time.length">
+              <div v-if="movie?.episode_run_time?.length">
                 <p class="statTitle">Average Runtime</p>
                 <span class="statSub">
                   <span v-if="movie.episode_run_time[1]"
@@ -282,7 +280,7 @@
                 <span class="statSub">{{ movie.number_of_episodes }}</span>
               </div>
               <!-- genre  -->
-              <div v-if="movie.genres.length">
+              <div v-if="movie?.genres?.length">
                 <p class="statTitle">Genre</p>
                 <v-chip
                   v-for="(item, index) in movie.genres"
@@ -297,7 +295,7 @@
                 </v-chip>
               </div>
               <!-- networks  -->
-              <div v-if="movie.networks.length">
+              <div v-if="movie?.networks?.length">
                 <p class="statTitle">Networks</p>
                 <div
                   v-for="(item, index) in movie.networks"
@@ -312,7 +310,7 @@
                 </div>
               </div>
               <!-- production  -->
-              <div v-if="movie.production_companies.length">
+              <div v-if="movie?.production_companies?.length">
                 <p
                   v-if="movie.production_companies[0].logo_path"
                   class="statTitle"
@@ -321,18 +319,19 @@
                 </p>
                 <v-row class="productionrow">
                   <div
-                    v-if="item.logo_path && item.logo_path != null"
                     v-for="(item, index) in movie.production_companies"
                     :key="index"
                     class="col-6"
                   >
-                    <div class="production">
-                      <img
-                        :title="item.name"
-                        v-if="item.logo_path && item.logo_path != null"
-                        :src="imageLink + imgSize + item.logo_path"
-                        :alt="item.name"
-                      />
+                    <div v-if="item.logo_path && item.logo_path != null">
+                      <div class="production">
+                        <img
+                          :title="item.name"
+                          v-if="item.logo_path && item.logo_path != null"
+                          :src="imageLink + imgSize + item.logo_path"
+                          :alt="item.name"
+                        />
+                      </div>
                     </div>
                   </div>
                 </v-row>
@@ -352,9 +351,12 @@
           data-aos="fade-up"
           data-aos-duration="500"
           style="overflow: hidden"
-          v-if="similarMovies.length"
-          :movies="similarMovies"
+          v-show="similarMovies.data.length"
+          :movies="similarMovies.data"
+          :pagination="similarMovies.pagination"
+          @paginate="getSimilarMovies"
           title="Similar Series"
+          ref="similarTab"
         />
       </section>
       <VideoDialogue ref="videoModal" />
@@ -366,11 +368,8 @@
 export default {
   data() {
     return {
-      movie: "",
+      movie: {},
       vipCrew: [],
-      videoTypeOf: ["movie", "tv", "seasonal"],
-      accessKey: process.env.API_BASE_KEY,
-      lang: "en-US",
       imageLink: process.env.API_BASE_IMAGE,
       imgSize: "original/",
       castData: {
@@ -379,175 +378,227 @@ export default {
       },
       allVids: {},
       gotTired: "",
-      similarMovies: [],
+      similarMovies: {
+        data: [],
+        pagination: {
+          page: 1,
+          total_pages: 1,
+        },
+      },
       recommended: [],
       tvLinks: [],
+      requestParams: {
+        media: "tv",
+        id: this.$route.params.id,
+        key: process.env.API_BASE_KEY,
+        lang: "en-US",
+        page: 1,
+      },
     };
   },
   async mounted() {
-    let requestParams = {
-      media: this.videoTypeOf[1],
-      id: this.$route.params.id,
-      key: this.accessKey,
-      lang: this.lang,
-      page: 1,
-    };
-    // get single video data
-    const data = await this.$axios.get(
-      `${this.videoTypeOf[1]}/${this.$route.params.id}?api_key=${this.accessKey}&languagae=${this.lang}`
-    );
-    await this.$store.dispatch("reviews", requestParams);
-    await this.$getReviews();
-
-    // set video data
-    const result = await data;
-
-    // get video urls
-    await this.$store.dispatch("allVideos", requestParams);
-    await this.$getAllVideos();
-    // set video url data
-    const vR = await this.$getAllVideos();
-    // iteriate through data and get the first trailer
-    let indexedItem = [];
-    vR.forEach((videos, index) => {
-      if (videos.type == "Trailer") {
-        if (!indexedItem.includes(index)) {
-          indexedItem.push(index);
-          Object.assign(result.data, { video_link: videos });
-        }
-      }
-    });
+    // get reviews
+    this.$store.dispatch("reviews", this.requestParams);
+    // get trailer
+    this.getAllSeriesVideo();
+    // get video external links
+    this.getExternalLinks();
+    // get recommended
+    this.getRecommended();
+    // get similar videos
+    this.getSimilarMovies();
+    // await single video data
+    await this.getSeriesData();
+    // get cast
+    this.getCast();
 
     // get watchproviders
     // const watchProvider = await this.$axios.get(
     //   `${requestParams.media}/${requestParams.id}/watch/providers?api_key=${requestParams.key}`
     // );
     // console.log(watchProvider.data);
-
-    //   reset vote average due to it coming back from the api as a long numerical decimal
-    result.data.vote_average = Math.ceil(result.data.vote_average * 10);
-    if (result.data.vote_average >= 75) {
-      Object.assign(result.data, { color: "#43bd84" });
-    } else if (
-      result.data.vote_average >= 55 &&
-      result.data.vote_average <= 74
-    ) {
-      Object.assign(result.data, { color: "#e6e36b" });
-    } else {
-      Object.assign(result.data, { color: "#bf1e22" });
-    }
-    this.movie = result.data;
-    const external_link = await this.$axios.get(
-      `${requestParams.media}/${requestParams.id}/external_ids?api_key=${this.accessKey}&languagae=${this.lang}`
-    );
-    let socials = [
-      {
-        title: "facebook",
-        link: external_link.data.facebook_id,
-      },
-      {
-        title: "twitter",
-        link: external_link.data.twitter_id,
-      },
-      {
-        title: "instagram",
-        link: external_link.data.instagram_id,
-      },
-      {
-        title: "freebase",
-        link: external_link.data.freebase_id,
-      },
-    ];
-    this.tvLinks = socials;
-    // get cast
-    const cast = await this.$axios.get(
-      `${this.videoTypeOf[1]}/${result.data.id}/credits?api_key=${this.accessKey}&languagae=${this.lang}`
-    );
-
-    // get creators and character dev
-    let creators = [];
-    let characters = [];
-    cast.data.crew.forEach((element) => {
-      if (element.job == "Creator") {
-        creators.push(element);
-      } else if (
-        element.department == "Writing" &&
-        element.job == "Characters"
-      ) {
-        characters.push(element);
-      }
-    });
-    if (creators.length) {
-      creators.forEach((element) => {
-        this.vipCrew.push(element);
-      });
-    }
-    if (characters.length) {
-      characters.forEach((element) => {
-        this.vipCrew.push(element);
-      });
-    }
-    this.castData.cast = cast.data.cast;
-    this.castData.cast = cast.data.cast;
-    // arrange videos
-    let allTrailer = [];
-    let allTeaser = [];
-    let allClips = [];
-    let allBts = [];
-    this.$getAllVideos().forEach((element) => {
-      switch (element.type) {
-        case "Trailer":
-          allTrailer.push(element);
-          break;
-        case "Behind the Scenes":
-          allBts.push(element);
-          break;
-        case "Clip":
-          allClips.push(element);
-          break;
-        case "Teaser":
-          allTeaser.push(element);
-          break;
-        default:
-          break;
-      }
-    });
-    if (allTrailer.length) {
-      Object.assign(this.allVids, { trailer: allTrailer });
-    }
-    if (allTeaser.length) {
-      Object.assign(this.allVids, { teaser: allTeaser });
-    }
-    if (allClips.length) {
-      Object.assign(this.allVids, { clips: allClips });
-    }
-    if (allBts.length) {
-      Object.assign(this.allVids, { bts: allBts });
-    }
-    this.gotTired = this.allVids;
-
-    // get recommended
-    const rec = await this.$axios.get(
-      `${requestParams.media}/${requestParams.id}/recommendations?api_key=${requestParams.key}&languagae=${requestParams.lang}&page=1`
-    );
-    this.recommended = rec.data.results;
-
-    // get similar videos
-    let similarVids = [];
-    for (var i = 1; i < 4; i++) {
-      await this.$axios
-        .get(
-          `${requestParams.media}/${requestParams.id}/similar?api_key=${requestParams.key}&languagae=${requestParams.lang}&page=${i}`
-        )
-        .then((res) => {
-          similarVids.push(res.data.results);
-        });
-    }
-    this.similarMovies = similarVids;
   },
   methods: {
     showModal(data) {
       this.$refs.videoModal.showImgModal(data);
+    },
+    async getSeriesData() {
+      try {
+        await this.$axios
+          .get(
+            `${this.requestParams.media}/${this.requestParams.id}?api_key=${this.requestParams.key}&languagae=${this.requestParams.lang}`
+          )
+          .then((res) => {
+            Object.assign(this.movie, res.data);
+            //   reset vote average due to it coming back from the api as a long numerical decimal
+            this.movie.vote_average = Math.ceil(this.movie.vote_average * 10);
+            if (this.movie.vote_average >= 75) {
+              Object.assign(this.movie, { color: "#43bd84" });
+            } else if (
+              this.movie.vote_average >= 55 &&
+              this.movie.vote_average <= 74
+            ) {
+              Object.assign(this.movie, { color: "#e6e36b" });
+            } else {
+              Object.assign(this.movie, { color: "#bf1e22" });
+            }
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async getAllSeriesVideo() {
+      try {
+        await this.$store.dispatch("allVideos", this.requestParams);
+        // set video url data
+        // iteriate through data and get the first trailer
+        let indexedItem = [];
+        let allTrailer = [];
+        let allTeaser = [];
+        let allClips = [];
+        let allBts = [];
+        this.$getAllVideos().forEach((videos, index) => {
+          if (videos.type == "Trailer") {
+            if (!indexedItem.includes(index)) {
+              indexedItem.push(index);
+              Object.assign(this.movie, { video_link: videos });
+            }
+          }
+          switch (videos.type) {
+            case "Trailer":
+              allTrailer.push(videos);
+              break;
+            case "Behind the Scenes":
+              allBts.push(videos);
+              break;
+            case "Clip":
+              allClips.push(videos);
+              break;
+            case "Teaser":
+              allTeaser.push(videos);
+              break;
+            default:
+              break;
+          }
+        });
+        if (allTrailer.length) {
+          Object.assign(this.allVids, { trailer: allTrailer });
+        }
+        if (allTeaser.length) {
+          Object.assign(this.allVids, { teaser: allTeaser });
+        }
+        if (allClips.length) {
+          Object.assign(this.allVids, { clips: allClips });
+        }
+        if (allBts.length) {
+          Object.assign(this.allVids, { bts: allBts });
+        }
+        this.gotTired = this.allVids;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async getExternalLinks() {
+      try {
+        await this.$axios
+          .get(
+            `${this.requestParams.media}/${this.requestParams.id}/external_ids?api_key=${this.requestParams.key}&languagae=${this.requestParams.lang}`
+          )
+          .then((res) => {
+            let socials = [
+              {
+                title: "facebook",
+                link: res.data.facebook_id,
+              },
+              {
+                title: "twitter",
+                link: res.data.twitter_id,
+              },
+              {
+                title: "instagram",
+                link: res.data.instagram_id,
+              },
+              {
+                title: "freebase",
+                link: res.data.freebase_id,
+              },
+            ];
+            this.tvLinks = socials;
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async getCast() {
+      try {
+        await this.$axios
+          .get(
+            `${this.requestParams.media}/${this.movie.id}/credits?api_key=${this.requestParams.key}&languagae=${this.requestParams.lang}`
+          )
+          .then((res) => {
+            // get creators and character dev
+            let creators = [];
+            let characters = [];
+            res.data.crew.forEach((element) => {
+              if (element.job == "Creator") {
+                creators.push(element);
+              } else if (
+                element.department == "Writing" &&
+                element.job == "Characters"
+              ) {
+                characters.push(element);
+              }
+            });
+            if (creators.length) {
+              creators.forEach((element) => {
+                this.vipCrew.push(element);
+              });
+            }
+            if (characters.length) {
+              characters.forEach((element) => {
+                this.vipCrew.push(element);
+              });
+            }
+            this.castData.cast = res.data.cast;
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async getRecommended() {
+      try {
+        await this.$axios
+          .get(
+            `${this.requestParams.media}/${this.requestParams.id}/recommendations?api_key=${this.requestParams.key}&languagae=${this.requestParams.lang}&page=1`
+          )
+          .then((res) => {
+            this.recommended = res.data.results;
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async getSimilarMovies(type) {
+      try {
+        if (type) {
+          this.requestParams.page = this.similarMovies.pagination.page;
+          this.$refs.similarTab.changeLoadingTrue();
+        }
+        await this.$axios
+          .get(
+            `${this.requestParams.media}/${this.requestParams.id}/similar?api_key=${this.requestParams.key}&languagae=${this.requestParams.lang}&page=${this.requestParams.page}`
+          )
+          .then((res) => {
+            this.similarMovies.data = res.data.results;
+            this.similarMovies.pagination = {
+              page: res.data.page,
+              total_pages: res.data.total_pages,
+            };
+            this.$refs.similarTab.changeLoadingFalse();
+          });
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
   head() {

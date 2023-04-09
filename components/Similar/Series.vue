@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="title == 'Similar Series'" class="tabBarContainer">
+    <div class="tabBarContainer">
       <div class="tabHeader similar">
         <div class="titleWrapper_cont">
           <header>{{ title }}</header>
@@ -8,14 +8,18 @@
         </div>
         <div class="pagination_container_videos">
           <v-pagination
+            @input="$emit('paginate', true)"
             :color="`var(--primary-color)`"
-            v-model="page"
-            :length="3"
+            v-model="pagination.page"
+            :length="pagination.total_pages > 15 ? 15 : pagination.total_pages"
+            :total-visible="5"
+            :aria-current="pagination.page"
           ></v-pagination>
         </div>
       </div>
       <div class="tab_wrapper">
         <v-tabs
+          v-if="!loading"
           hide-slider
           color="transparent"
           center-active
@@ -24,7 +28,7 @@
         >
           <v-tab
             :ripple="false"
-            v-for="(item, index) in movies[page - 1]"
+            v-for="(item, index) in movies"
             :key="index"
             class="listingTab similar"
             style="width: 250px; padding-left: 0"
@@ -34,16 +38,18 @@
                 class="relative imgContainer"
                 :class="{ trending: !item.overview }"
               >
-                <img
-                  v-if="item.poster_path == '' || item.poster_path == null"
-                  src="/images/poster.png"
-                  :alt="item.name"
-                />
-                <img
-                  v-else
-                  :src="imageLink + imgSize + item.poster_path"
-                  :alt="item.name"
-                />
+                <nuxt-link :to="`/seasonal/${item.id}`">
+                  <img
+                    v-if="item.poster_path == '' || item.poster_path == null"
+                    src="/images/poster.png"
+                    :alt="item.name"
+                  />
+                  <img
+                    v-else
+                    :src="imageLink + imgSize + item.poster_path"
+                    :alt="item.name"
+                  />
+                </nuxt-link>
                 <!-- ratings  -->
                 <div class="absolute flex_all_center video_ratings">
                   {{ refactorRatings(item.vote_average) }}
@@ -72,6 +78,7 @@
             </div>
           </v-tab>
         </v-tabs>
+        <LoadingTwo v-else />
       </div>
     </div>
   </div>
@@ -79,12 +86,13 @@
 
 <script>
 export default {
-  props: ["movies", "title"],
+  props: ["movies", "title", "pagination"],
   data() {
     return {
       imageLink: process.env.API_BASE_IMAGE,
       imgSize: "original/",
       page: 1,
+      loading: false,
     };
   },
   methods: {
@@ -92,6 +100,12 @@ export default {
       var variable = "";
       variable = Math.ceil(item * 10) / 10;
       return variable;
+    },
+    changeLoadingTrue() {
+      this.loading = true;
+    },
+    changeLoadingFalse() {
+      this.loading = false;
     },
   },
 };

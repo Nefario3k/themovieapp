@@ -27,16 +27,18 @@
                 class="relative imgContainer"
                 :class="{ trending: !item.overview }"
               >
-                <img
-                  v-if="item.poster_path && item.poster_path != null"
-                  :src="imageLink + imgSize + item.poster_path"
-                  :alt="item.original_title"
-                />
-                <img
-                  v-else
-                  src="/images/poster.png"
-                  :alt="item.original_title"
-                />
+                <nuxt-link :to="`/movie/${item.id}`">
+                  <img
+                    v-if="item.poster_path && item.poster_path != null"
+                    :src="imageLink + imgSize + item.poster_path"
+                    :alt="item.original_title"
+                  />
+                  <img
+                    v-else
+                    src="/images/poster.png"
+                    :alt="item.original_title"
+                  />
+                </nuxt-link>
                 <!-- ratings  -->
                 <div class="absolute flex_all_center video_ratings">
                   {{ refactorRatings(item.vote_average) }}

@@ -2,21 +2,14 @@ export const state = () => ({
     searchedData: [],
     searchedDataCount: '',
     searchPersonData: [],
-    nowPlaying: [],
-    nowPlayingOthers: [],
-    popular: [],
-    popularOthers: [],
-    popularSeries: [],
-    popularOtherSeries: [],
-    topRated: [],
-    topRatedOthers: [],
-    topRatedSeries: [],
-    topRatedOtherSeries: [],
-    onTheAir: [],
-    onTheAirOthers: [],
-    upcoming: [],
-    upcomingOthers: [],
-    upcomingMovies: [],
+    nowPlaying: {},
+    popular: {},
+    popularSeries: {},
+    topRated: {},
+    topRatedSeries: {},
+    onTheAir: {},
+    upcoming: {},
+    upcomingMovies: {},
     trending: [],
     trendingMovies: [],
     trendingSeries: [],
@@ -96,7 +89,7 @@ export const actions = {
             await this.$axios.get(
                 `${data.media}/now_playing?api_key=${data.key}&languagae=${data.lang}&page=${data.page}`
             ).then((res) => {
-                commit('setNowPlaying', res.data.results)
+                commit('setNowPlaying', res.data)
                 commit('setTrailers', res.data.results.slice(0, 10))
                 let trailerData = {
                     data: res.data.results.slice(0, 10),
@@ -110,44 +103,13 @@ export const actions = {
             console.log(err)
         }
     },
-    async nowPlayingOthers({ commit }, data) {
-        try {
-            let initial = []
-            for (var i = 2; i < this.state.contentAmount; i++) {
-                await this.$axios.get(
-                    `${data.media}/now_playing?api_key=${data.key}&languagae=${data.lang}&page=${i}`
-                ).then((res) => {
-                    initial.push(res.data.results)
-                })
-            }
-            commit('setNowPlayingOthers', initial)
-        } catch (err) {
-            console.log(err)
-        }
-    },
     async popular({ commit }, data) {
         try {
             await this.$axios.get(
                 `${data.media}/popular?api_key=${data.key}&languagae=${data.lang}&page=${data.page}`
             ).then((res) => {
-                commit('setPopular', res.data.results)
+                commit('setPopular', res.data)
             })
-        } catch (err) {
-            console.log(err)
-        }
-    },
-    async popularOthers({ commit }, data) {
-        try {
-            let initial = []
-            for (var i = 2; i < this.state.contentAmount; i++) {
-                await this.$axios.get(
-                    `${data.media}/popular?api_key=${data.key}&languagae=${data.lang}&page=${i}`
-                ).then((res) => {
-                    initial.push(res.data.results)
-                })
-            }
-            commit('setPopularOthers', initial)
-
         } catch (err) {
             console.log(err)
         }
@@ -157,24 +119,8 @@ export const actions = {
             await this.$axios.get(
                 `${data.media}/popular?api_key=${data.key}&languagae=${data.lang}&page=${data.page}`
             ).then((res) => {
-                commit('setPopularSeries', res.data.results)
+                commit('setPopularSeries', res.data)
             })
-        } catch (err) {
-            console.log(err)
-        }
-    },
-    async popularOtherSeries({ commit }, data) {
-        try {
-            let initial = []
-            for (var i = 2; i < this.state.contentAmount; i++) {
-                await this.$axios.get(
-                    `${data.media}/popular?api_key=${data.key}&languagae=${data.lang}&page=${i}`
-                ).then((res) => {
-                    initial.push(res.data.results)
-
-                })
-            }
-            commit('setPopularOtherSeries', initial)
         } catch (err) {
             console.log(err)
         }
@@ -184,24 +130,8 @@ export const actions = {
             await this.$axios.get(
                 `${data.media}/top_rated?api_key=${data.key}&languagae=${data.lang}&page=${data.page}`
             ).then((res) => {
-                commit('setTopRated', res.data.results)
+                commit('setTopRated', res.data)
             })
-        } catch (err) {
-            console.log(err)
-        }
-    },
-    async topRatedOthers({ commit }, data) {
-        try {
-            let initial = []
-            for (var i = 2; i < this.state.contentAmount; i++) {
-                await this.$axios.get(
-                    `${data.media}/top_rated?api_key=${data.key}&languagae=${data.lang}&page=${i}`
-                ).then((res) => {
-                    initial.push(res.data.results)
-                })
-            }
-            commit('setTopRatedOthers', initial)
-
         } catch (err) {
             console.log(err)
         }
@@ -211,7 +141,7 @@ export const actions = {
             await this.$axios.get(
                 `${data.media}/top_rated?api_key=${data.key}&languagae=${data.lang}&page=${data.page}`
             ).then((res) => {
-                commit('setTopRatedSeries', res.data.results)
+                commit('setTopRatedSeries', res.data)
                 commit('setSeasonalTrailers', res.data.results.slice(0, 10))
                 let trailerData = {
                     data: res.data.results.slice(0, 10),
@@ -225,44 +155,13 @@ export const actions = {
             console.log(err)
         }
     },
-    async topRatedOtherSeries({ commit }, data) {
-        try {
-            let initial = []
-            for (var i = 2; i < this.state.contentAmount; i++) {
-                await this.$axios.get(
-                    `${data.media}/top_rated?api_key=${data.key}&languagae=${data.lang}&page=${i}`
-                ).then((res) => {
-                    initial.push(res.data.results)
-                })
-            }
-            commit('setTopRatedOtherSeries', initial)
-
-        } catch (err) {
-            console.log(err)
-        }
-    },
     async onTheAir({ commit }, data) {
         try {
             await this.$axios.get(
-                `${data.media}/on_the_air?api_key=${data.key}&languagae=${data.lang}`
+                `${data.media}/on_the_air?api_key=${data.key}&languagae=${data.lang}&page=${data.page}`
             ).then((res) => {
-                commit('setOnTheAir', res.data.results)
+                commit('setOnTheAir', res.data)
             })
-        } catch (err) {
-            console.log(err)
-        }
-    },
-    async onTheAirOthers({ commit }, data) {
-        try {
-            let initial = []
-            for (var i = 2; i < this.state.contentAmount; i++) {
-                await this.$axios.get(
-                    `${data.media}/on_the_air?api_key=${data.key}&languagae=${data.lang}&page=${i}`
-                ).then((res) => {
-                    initial.push(res.data.results)
-                })
-            }
-            commit('setOnTheAirOthers', initial)
         } catch (err) {
             console.log(err)
         }
@@ -272,23 +171,8 @@ export const actions = {
             await this.$axios.get(
                 `${data.media}/upcoming?api_key=${data.key}&languagae=${data.lang}&page=${data.page}`
             ).then((res) => {
-                commit('setUpcoming', res.data.results)
+                commit('setUpcoming', res.data)
             })
-        } catch (err) {
-            console.log(err)
-        }
-    },
-    async upcomingOthers({ commit }, data) {
-        try {
-            let initial = []
-            for (var i = 2; i < this.state.contentAmount; i++) {
-                await this.$axios.get(
-                    `${data.media}/upcoming?api_key=${data.key}&languagae=${data.lang}&page=${i}`
-                ).then((res) => {
-                    initial.push(res.data.results)
-                })
-            }
-            commit('setUpcomingOthers', initial)
         } catch (err) {
             console.log(err)
         }
@@ -298,7 +182,7 @@ export const actions = {
             await this.$axios.get(
                 `${data.media}/popular?api_key=${data.key}&languagae=${data.lang}&page=${data.page}`
             ).then((res) => {
-                commit('setUpcomingMovies', res.data.results)
+                commit('setUpcomingMovies', res.data)
                 commit('setMovieTrailers', res.data.results.slice(0, 10))
                 let trailerData = {
                     data: res.data.results.slice(0, 10),

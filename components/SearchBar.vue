@@ -43,6 +43,7 @@
             :class="{ scrolled: color != 'transparent' }"
             type="text"
             name=""
+            required
             v-model="searchInput"
           />
           <a
@@ -83,6 +84,7 @@
             :class="{ scrolled: color != 'transparent' }"
             type="text"
             name=""
+            required
             v-model="searchInput"
           />
           <a

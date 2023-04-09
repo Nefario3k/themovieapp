@@ -1,5 +1,5 @@
 <template>
-  <div id="search">
+  <div v-if="$route.query?.query" id="search">
     <v-container>
       <v-row style="margin: 0 0 25px 0">
         <div class="col-12">
@@ -64,22 +64,30 @@ export default {
     };
   },
   async mounted() {
-    this.searchedValue = this.$route.query.query;
-    const page = this.$route.query.page;
-    this.page = Number(page);
-    let searchParams = [
-      this.videoTypeOf[0],
-      this.videoTypeOf[1],
-      this.accessKey,
-      this.lang,
-      this.searchedValue,
-      page,
-      this.include_adult,
-    ];
-    await this.$store.dispatch("startSearch", searchParams);
-    this.searchedResult = await this.$getSearchResult();
-    this.loader = false;
-    await this.$getSearchCount();
+    if (!this.$route.query?.query) {
+      this.$router.push({
+        path: "/",
+        replace: true,
+      });
+      return;
+    } else {
+      this.searchedValue = this.$route.query.query;
+      const page = this.$route.query.page;
+      this.page = Number(page);
+      let searchParams = [
+        this.videoTypeOf[0],
+        this.videoTypeOf[1],
+        this.accessKey,
+        this.lang,
+        this.searchedValue,
+        page,
+        this.include_adult,
+      ];
+      await this.$store.dispatch("startSearch", searchParams);
+      this.searchedResult = await this.$getSearchResult();
+      this.loader = false;
+      await this.$getSearchCount();
+    }
   },
   methods: {
     async pageController() {
@@ -94,6 +102,13 @@ export default {
       ];
       this.searchedResult = [];
       this.loader = true;
+      try {
+      } catch (err) {
+        console.log(err);
+        if (err.response) {
+          console.log(err);
+        }
+      }
       await this.$store.dispatch("startSearch", searchParams);
       this.searchedResult = await this.$getSearchResult();
       this.loader = false;
@@ -105,7 +120,7 @@ export default {
   },
   head() {
     return {
-      title: this.$route.query.query.toUpperCase() + " - search",
+      title: this.$route?.query?.query?.toUpperCase() + " - search",
       meta: [
         {
           hid: "description",

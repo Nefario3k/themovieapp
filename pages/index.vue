@@ -11,8 +11,12 @@
       v-for="(item, index) in videoContent"
       :key="index"
       :movies="item.movies"
-      :extraMovies="item.extraMovies"
       :title="item.title"
+      :item="index"
+      :pagination="item.pagination"
+      @paginate="paginate"
+      :trendingParams="trendingParams"
+      ref="videotab"
     />
   </div>
 </template>
@@ -22,131 +26,228 @@ export default {
   data() {
     return {
       sliderContent: "",
-      movies: [],
+      loading: false,
       videoContent: [
         {
           title: "Now Playing",
           movies: [],
-          extraMovies: [],
+          pagination: {
+            page: 1,
+            total_pages: 1,
+          },
         },
         {
           title: "What's Popular",
           movies: [],
-          extraMovies: [],
+          pagination: {
+            page: 1,
+            total_pages: 1,
+          },
         },
         {
           title: "Top Rated",
           movies: [],
-          extraMovies: [],
+          pagination: {
+            page: 1,
+            total_pages: 1,
+          },
         },
         {
           title: "Upcoming Movies",
           movies: [],
-          extraMovies: [],
+          pagination: {
+            page: 1,
+            total_pages: 1,
+          },
         },
         {
           title: "Trending",
           movies: [],
-          extraMovies: [],
+          pagination: {
+            page: 1,
+            total_pages: 1,
+          },
         },
       ],
-      videoTypeOf: ["movie", "trending"],
-      accessKey: process.env.API_BASE_KEY,
-      imageLink: process.env.API_BASE_IMAGE,
-      imgSize: "original/",
-      lang: "en-US",
-      trending_type: "all",
-      trendingFormat: "week",
-      currentPage: 1,
+      requetParams: {
+        media: "movie",
+        key: process.env.API_BASE_KEY,
+        lang: "en-US",
+        page: 1,
+      },
+      trendingParams: {
+        media: "trending",
+        key: process.env.API_BASE_KEY,
+        format: "week",
+        type: "all",
+      },
     };
   },
-  async mounted() {
-    let requetParams = {
-      media: this.videoTypeOf[0],
-      key: this.accessKey,
-      lang: this.lang,
-      page: this.currentPage,
-    };
-    let trendingParams = {
-      media: this.videoTypeOf[1],
-      type: this.trending_type,
-      format: this.trendingFormat,
-      key: this.accessKey,
-    };
-    try {
-      // get now playing
-      if (!this.$getNowPlaying().length) {
-        await this.$store.dispatch("nowPlaying", requetParams);
-        this.videoContent[0].movies = await this.$getNowPlaying();
-      } else {
-        this.videoContent[0].movies = await this.$getNowPlaying();
-      }
-
-      // get popular
-      if (!this.$getPopular().length) {
-        await this.$store.dispatch("popular", requetParams);
-        this.videoContent[1].movies = await this.$getPopular();
-      } else {
-        this.videoContent[1].movies = await this.$getPopular();
-      }
-
-      // get Top rated movies
-      if (!this.$getTopRated().length) {
-        await this.$store.dispatch("topRated", requetParams);
-        this.videoContent[2].movies = await this.$getTopRated();
-      } else {
-        this.videoContent[2].movies = await this.$getTopRated();
-      }
-
-      // get Upcoming movies
-      if (!this.$getUpcoming().length) {
-        await this.$store.dispatch("upcoming", requetParams);
-        this.videoContent[3].movies = await this.$getUpcoming();
-      } else {
-        this.videoContent[3].movies = await this.$getUpcoming();
-      }
-
-      // get Trending
-      if (!this.$getTrending().length) {
-        await this.$store.dispatch("trending", trendingParams);
-        this.videoContent[4].movies = await this.$getTrending();
-      } else {
-        this.videoContent[4].movies = await this.$getTrending();
-      }
-
-      // get others
-      if (!this.$getMovieOthers().length) {
-        await this.$store.dispatch("nowPlayingOthers", requetParams);
-        await this.$store.dispatch("popularOthers", requetParams);
-        await this.$store.dispatch("topRatedOthers", requetParams);
-        await this.$store.dispatch("upcomingOthers", requetParams);
-        await this.$getMovieOthers();
-        for (var i = 0; i < this.$getMovieOthers().length; i++) {
-          if (this.videoContent[i].title == this.$getMovieOthers()[i].title) {
-            this.videoContent[i].extraMovies = this.$getMovieOthers()[i].movies;
-          }
-        }
-      } else {
-        await this.$getMovieOthers();
-        for (var i = 0; i < this.$getMovieOthers().length; i++) {
-          if (this.videoContent[i].title == this.$getMovieOthers()[i].title) {
-            this.videoContent[i].extraMovies = this.$getMovieOthers()[i].movies;
-          }
-        }
-      }
-      if (this.$getTrendingAll().length < 3) {
-        await this.$store.dispatch("trendingMovies", trendingParams);
-        await this.$store.dispatch("trendingSeries", trendingParams);
-        await this.$store.dispatch("trendingPersons", trendingParams);
-        await this.$getTrendingAll();
-      } else {
-        await this.$getTrendingAll();
-      }
-    } catch (err) {
-      console.log(err);
-    }
+  mounted() {
+    this.getNowPlaying();
+    this.getPopular();
+    this.getTopRated();
+    this.getUpcoming();
+    this.getTrending(this.trendingParams);
   },
-  methods: {},
+  methods: {
+    async getNowPlaying(page) {
+      try {
+        let requetParams = structuredClone(this.requetParams);
+        if (page) {
+          this.$refs.videotab[0].changeLoading();
+          requetParams.page = this.videoContent[0].pagination.page;
+          await this.$store.dispatch("nowPlaying", requetParams);
+          this.videoContent[0].movies = this.$getNowPlaying().results;
+          this.videoContent[0].pagination.page = this.$getNowPlaying().page;
+          this.videoContent[0].pagination.total_pages =
+            this.$getNowPlaying().total_pages;
+          this.$refs.videotab[0].changeLoading();
+        } else {
+          // get now playing
+          if (!Object.keys(this.$getNowPlaying()).length) {
+            await this.$store.dispatch("nowPlaying", requetParams);
+            this.videoContent[0].movies = this.$getNowPlaying().results;
+            this.videoContent[0].pagination.page = this.$getNowPlaying().page;
+            this.videoContent[0].pagination.total_pages =
+              this.$getNowPlaying().total_pages;
+          } else {
+            this.videoContent[0].movies = this.$getNowPlaying().results;
+            this.videoContent[0].pagination.page = this.$getNowPlaying().page;
+            this.videoContent[0].pagination.total_pages =
+              this.$getNowPlaying().total_pages;
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async getPopular(page) {
+      try {
+        let requetParams = structuredClone(this.requetParams);
+        if (!page) {
+          // get popular
+          if (!Object.keys(this.$getPopular()).length) {
+            await this.$store.dispatch("popular", requetParams);
+            this.videoContent[1].movies = this.$getPopular().results;
+            this.videoContent[1].pagination.page = this.$getPopular().page;
+            this.videoContent[1].pagination.total_pages =
+              this.$getPopular().total_pages;
+          } else {
+            this.videoContent[1].movies = this.$getPopular().results;
+            this.videoContent[1].pagination.page = this.$getPopular().page;
+            this.videoContent[1].pagination.total_pages =
+              this.$getPopular().total_pages;
+          }
+        } else {
+          this.$refs.videotab[1].changeLoading();
+          requetParams.page = this.videoContent[1].pagination.page;
+          await this.$store.dispatch("popular", requetParams);
+          this.videoContent[1].movies = this.$getPopular().results;
+          this.videoContent[1].pagination.page = this.$getPopular().page;
+          this.videoContent[1].pagination.total_pages =
+            this.$getPopular().total_pages;
+          this.$refs.videotab[1].changeLoading();
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async getTopRated(page) {
+      try {
+        let requetParams = structuredClone(this.requetParams);
+        if (!page) {
+          // get popular
+          if (!Object.keys(this.$getTopRated()).length) {
+            await this.$store.dispatch("topRated", requetParams);
+            this.videoContent[2].movies = this.$getTopRated().results;
+            this.videoContent[2].pagination.page = this.$getTopRated().page;
+            this.videoContent[2].pagination.total_pages =
+              this.$getTopRated().total_pages;
+          } else {
+            this.videoContent[2].movies = this.$getTopRated().results;
+            this.videoContent[2].pagination.page = this.$getTopRated().page;
+            this.videoContent[2].pagination.total_pages =
+              this.$getTopRated().total_pages;
+          }
+        } else {
+          this.$refs.videotab[2].changeLoading();
+          requetParams.page = this.videoContent[2].pagination.page;
+          await this.$store.dispatch("topRated", requetParams);
+          this.videoContent[2].movies = this.$getTopRated().results;
+          this.videoContent[2].pagination.page = this.$getTopRated().page;
+          this.videoContent[2].pagination.total_pages =
+            this.$getTopRated().total_pages;
+          this.$refs.videotab[2].changeLoading();
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async getUpcoming(page) {
+      try {
+        let requetParams = structuredClone(this.requetParams);
+        if (!page) {
+          // get popular
+          if (!Object.keys(this.$getUpcoming()).length) {
+            await this.$store.dispatch("upcoming", requetParams);
+            this.videoContent[3].movies = this.$getUpcoming().results;
+            this.videoContent[3].pagination.page = this.$getUpcoming().page;
+            this.videoContent[3].pagination.total_pages =
+              this.$getUpcoming().total_pages;
+          } else {
+            this.videoContent[3].movies = this.$getUpcoming().results;
+            this.videoContent[3].pagination.page = this.$getUpcoming().page;
+            this.videoContent[3].pagination.total_pages =
+              this.$getUpcoming().total_pages;
+          }
+        } else {
+          this.$refs.videotab[3].changeLoading();
+          requetParams.page = this.videoContent[3].pagination.page;
+          await this.$store.dispatch("upcoming", requetParams);
+          this.videoContent[3].movies = this.$getUpcoming().results;
+          this.videoContent[3].pagination.page = this.$getUpcoming().page;
+          this.videoContent[3].pagination.total_pages =
+            this.$getUpcoming().total_pages;
+          this.$refs.videotab[3].changeLoading();
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async getTrending(trendingParams) {
+      try {
+        // get Trending
+        if (!this.$getTrending().length) {
+          await this.$store.dispatch("trending", trendingParams);
+          this.videoContent[4].movies = await this.$getTrending();
+        } else {
+          this.videoContent[4].movies = await this.$getTrending();
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    paginate(type) {
+      switch (type) {
+        case 0:
+          this.getNowPlaying(true);
+          break;
+        case 1:
+          this.getPopular(true);
+          break;
+        case 2:
+          this.getTopRated(true);
+          break;
+        case 3:
+          this.getUpcoming(true);
+          break;
+
+        default:
+          break;
+      }
+    },
+  },
   head() {
     return {
       title: "Movie App - Latest Streaming Movies And series info",

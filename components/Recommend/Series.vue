@@ -27,16 +27,18 @@
                 class="relative imgContainer"
                 :class="{ trending: !item.overview }"
               >
-                <img
-                  v-if="item.poster_path == '' || item.poster_path == null"
-                  src="/images/poster.png"
-                  :alt="item.name"
-                />
-                <img
-                  v-else
-                  :src="imageLink + imgSize + item.poster_path"
-                  :alt="item.name"
-                />
+                <nuxt-link :to="`/seasonal/${item.id}`">
+                  <img
+                    v-if="item.poster_path == '' || item.poster_path == null"
+                    src="/images/poster.png"
+                    :alt="item.name"
+                  />
+                  <img
+                    v-else
+                    :src="imageLink + imgSize + item.poster_path"
+                    :alt="item.name"
+                  />
+                </nuxt-link>
                 <!-- ratings  -->
                 <div class="absolute flex_all_center video_ratings">
                   {{ refactorRatings(item.vote_average) }}
