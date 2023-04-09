@@ -33,7 +33,7 @@ This template design was created after observing streaming platforms layout and 
 - Add movies to your favorites list
 - Share movies with your friends via social media or email
 
-Users are alse able to:
+Users are also able to:
 
 - View the optimal layout depending on their device's screen size
 - See hover states for interactive elements
