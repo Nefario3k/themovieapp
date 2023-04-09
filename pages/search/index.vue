@@ -6,7 +6,7 @@
           <header class="header">
             You searched for :
             <span style="font-style: italic; font-weight: 600">{{
-              searchedValue
+              this.$route.query.query
             }}</span>
           </header>
         </div>
@@ -63,7 +63,7 @@ export default {
       loader: true,
     };
   },
-  async mounted() {
+  mounted() {
     if (!this.$route.query?.query) {
       this.$router.push({
         path: "/",
@@ -71,56 +71,54 @@ export default {
       });
       return;
     } else {
-      this.searchedValue = this.$route.query.query;
-      const page = this.$route.query.page;
-      this.page = Number(page);
-      let searchParams = [
-        this.videoTypeOf[0],
-        this.videoTypeOf[1],
-        this.accessKey,
-        this.lang,
-        this.searchedValue,
-        page,
-        this.include_adult,
-      ];
-      await this.$store.dispatch("startSearch", searchParams);
-      this.searchedResult = await this.$getSearchResult();
-      this.loader = false;
-      await this.$getSearchCount();
+      this.search();
+    }
+  },
+  updated() {
+    if (this.searchedValue !== this.$route.query.query) {
+      this.search();
     }
   },
   methods: {
-    async pageController() {
-      let searchParams = [
-        this.videoTypeOf[0],
-        this.videoTypeOf[1],
-        this.accessKey,
-        this.lang,
-        this.searchedValue,
-        this.page,
-        this.include_adult,
-      ];
-      this.searchedResult = [];
-      this.loader = true;
+    pageController() {
+      this.search(true);
+      this.$router.push({
+        path: `/search?query=${this.searchedValue}&page=${this.page}`,
+        replace: true,
+      });
+    },
+    async search(pagination) {
       try {
+        this.loader = true;
+        this.searchedResult = [];
+        this.searchedValue = structuredClone(this.$route.query.query);
+        if (pagination) {
+          var page = this.page;
+        } else {
+          var page = this.$route.query.page;
+          this.page = Number(page);
+        }
+        let searchParams = [
+          this.videoTypeOf[0],
+          this.videoTypeOf[1],
+          this.accessKey,
+          this.lang,
+          this.searchedValue,
+          page,
+          this.include_adult,
+        ];
+        await this.$store.dispatch("startSearch", searchParams);
+        this.searchedResult = await this.$getSearchResult();
+        this.loader = false;
+        await this.$getSearchCount();
       } catch (err) {
         console.log(err);
-        if (err.response) {
-          console.log(err);
-        }
       }
-      await this.$store.dispatch("startSearch", searchParams);
-      this.searchedResult = await this.$getSearchResult();
-      this.loader = false;
-
-      this.$router.push({
-        path: "/search/#?query=" + this.searchedValue + "&page=" + this.page,
-      });
     },
   },
   head() {
     return {
-      title: this.$route?.query?.query?.toUpperCase() + " - search",
+      title: this.$route?.query?.query + " - search",
       meta: [
         {
           hid: "description",
