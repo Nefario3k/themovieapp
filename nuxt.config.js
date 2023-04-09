@@ -1,13 +1,13 @@
 import colors from 'vuetify/es5/util/colors'
-import AOS from "aos";
+// import AOS from "aos";
 
 
 export default {
-  ssr: false,
+  // ssr: false,
   target: 'static',
-  router: {
-    base: '/themovieapp/'
-  },
+  // router: {
+  //   base: '/themovieapp/'
+  // },
   server: {
     port: process.env.PORT || 3000
   },
