@@ -1,4 +1,10 @@
 export default (context, inject) => {
+    inject('refactorRatings', (item) => {
+        var variable = "";
+        variable = Math.ceil(item * 10) / 10;
+        return variable;
+    })
+
     // Get search Resources
     inject('getSearchResult', () => {
         return context.store.state.searchedData;

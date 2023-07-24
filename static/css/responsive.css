@@ -300,6 +300,23 @@ body .dark,
     .tabBarContainer .tabHeader {
         flex-direction: column;
         align-items: flex-start;
+        grid-gap: 12px;
+    }
+
+    .tabBarContainer .tabHeader div:nth-child(2) {
+        /* display: flex;
+        justify-content: flex-end; */
+        width: 100%;
+        margin: 0;
+    }
+
+    .tabBarContainer .tabHeader div:nth-child(2)>nav,
+    .tabBarContainer .tabHeader div:nth-child(2)>button {
+        width: calc(100% - 12px) !important;
+    }
+
+    .tabBarContainer .tabHeader div:nth-child(2)>nav ul {
+        justify-content: center !important;
     }
 
     .tabBarContainer .tabHeader .pagination_container_videos {

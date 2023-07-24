@@ -7,73 +7,75 @@
           <div class="lineUnder"></div>
         </div>
       </div>
-      <div class="tab_wrapper">
-        <v-tabs
-          hide-slider
-          color="transparent"
-          center-active
-          :dark="false"
-          :height="`100%`"
-        >
-          <v-tab
-            :ripple="false"
-            v-for="(item, index) in movies"
-            :key="index"
-            class="listingTab similar"
-            style="width: 250px; padding-left: 0"
-          >
-            <div class="flex_down">
-              <div
-                class="relative imgContainer"
-                :class="{ trending: !item.overview }"
+      <div v-if="movies && movies.length" class="tab_wrapper">
+        <div class="d-flex justify-content-center">
+          <div class="mt-3 tab__container relative">
+            <button
+              @click="scrollLeftNav"
+              :class="{ visibleButton: !showLeftButton }"
+              class="testimonal__prev"
+            >
+              <svg
+                width="8"
+                height="13"
+                viewBox="0 0 8 13"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <nuxt-link :to="`/movie/${item.id}`">
-                  <img
-                    v-if="item.poster_path && item.poster_path != null"
-                    :src="imageLink + imgSize + item.poster_path"
-                    :alt="item.original_title"
-                  />
-                  <img
-                    v-else
-                    src="/images/poster.png"
-                    :alt="item.original_title"
-                  />
-                </nuxt-link>
-                <!-- ratings  -->
-                <div class="absolute flex_all_center video_ratings">
-                  {{ refactorRatings(item.vote_average) }}
-                </div>
-                <!-- over view  -->
-                <div v-if="item.overview" class="absolute overview">
-                  {{ item.overview.slice(0, 200) }}
-                  <span v-if="item.overview.length > 200">...</span>
-                  <nuxt-link :to="`/movie/${item.id}`">Read more</nuxt-link>
-                </div>
-              </div>
-              <div class="listingTag">
-                <nuxt-link :to="`/movie/${item.id}`">
-                  <h3>{{ item.original_title }}</h3>
-                </nuxt-link>
-                <p>
-                  {{
-                    new Date(item.release_date).toLocaleString("en-us", {
-                      month: "long",
-                      day: "numeric",
-                      year: "numeric",
-                    })
-                  }}
-                </p>
+                <path
+                  d="M7 12L2 6.5L7 1"
+                  stroke="#000831"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+            <button
+              @click="scrollRightNav"
+              :class="{ visibleButton: !showRightButton }"
+              class="testimonal__next"
+            >
+              <svg
+                width="8"
+                height="13"
+                viewBox="0 0 8 13"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M1 1L6 6.5L1 12"
+                  stroke="#000831"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+            <div
+              @scroll="updateButtonVisibility"
+              @mousedown="handleMouseDown"
+              ref="scrollContainer"
+              :class="{ isDragging: isDragging }"
+              class="tab__content scrollSnap01"
+            >
+              <div
+                v-for="(item, index) in movies"
+                :key="index"
+                class="listingTab personTab"
+              >
+                <ContentMovie :item="item" />
               </div>
             </div>
-          </v-tab>
-        </v-tabs>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import tabControl from "~/mixins/tab";
 export default {
+  mixins: [tabControl],
   props: ["movies", "title"],
   data() {
     return {

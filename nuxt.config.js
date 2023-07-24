@@ -40,6 +40,7 @@ export default {
   css: [
     '~/static/css/main.css',
     '~/static/css/responsive.css',
+    '~/static/css/overide.scss',
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins

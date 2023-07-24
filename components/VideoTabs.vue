@@ -24,78 +24,72 @@
           </div>
         </div>
         <div data-aos="fade-up" data-aos-duration="500" class="tab_wrapper">
-          <v-tabs
-            v-if="!loading"
-            hide-slider
-            color="transparent"
-            center-active
-            :dark="false"
-            :height="`100%`"
-          >
-            <v-tab
-              :ripple="false"
-              v-for="(item, index) in movies"
-              :key="index"
-              class="listingTab personTab"
-              style="width: 250px; padding-left: 0"
-            >
-              <div class="flex_down">
-                <div
-                  class="relative imgContainer"
-                  :class="{ trending: !item.overview }"
+          <div class="d-flex justify-content-center">
+            <div v-show="!loading" class="mt-3 tab__container relative">
+              <button
+                @click="scrollLeftNav"
+                :class="{ visibleButton: !showLeftButton }"
+                class="testimonal__prev"
+              >
+                <svg
+                  width="8"
+                  height="13"
+                  viewBox="0 0 8 13"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  <nuxt-link :to="`/movie/${item.id}`">
-                    <img
-                      v-if="item.poster_path && item.poster_path != null"
-                      :src="imageLink + imgSize + item.poster_path"
-                      :alt="item.original_title"
-                    />
-                    <img
-                      v-else
-                      src="/images/poster.png"
-                      :alt="item.original_title"
-                    />
-                  </nuxt-link>
-                  <!-- ratings  -->
-                  <div class="absolute flex_all_center video_ratings">
-                    {{ refactorRatings(item.vote_average) }}
-                  </div>
-                  <!-- over view  -->
-                  <div v-if="item.overview" class="absolute overview">
-                    {{ item.overview.slice(0, 200) }}
-                    <span v-if="item.overview.length > 200">...</span>
-                    <nuxt-link :to="`/movie/${item.id}`">Read more</nuxt-link>
-                  </div>
-                </div>
-                <div class="listingTag">
-                  <nuxt-link :to="`/movie/${item.id}`">
-                    <h3>{{ item.original_title }}</h3>
-                  </nuxt-link>
-                  <p>
-                    {{
-                      new Date(item.release_date).toLocaleString("en-us", {
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric",
-                      })
-                    }}
-                  </p>
+                  <path
+                    d="M7 12L2 6.5L7 1"
+                    stroke="#000831"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </button>
+              <button
+                @click="scrollRightNav"
+                :class="{ visibleButton: !showRightButton }"
+                class="testimonal__next"
+              >
+                <svg
+                  width="8"
+                  height="13"
+                  viewBox="0 0 8 13"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1 1L6 6.5L1 12"
+                    stroke="#000831"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </button>
+              <div
+                @scroll="updateButtonVisibility"
+                @mousedown="handleMouseDown"
+                ref="scrollContainer"
+                :class="{ isDragging: isDragging }"
+                class="tab__content scrollSnap01"
+              >
+                <div
+                  v-for="(item, index) in movies"
+                  :key="index"
+                  class="listingTab personTab"
+                >
+                  <ContentMovie :item="item" />
                 </div>
               </div>
-              <!-- <v-img
-                    :src="imageLink + imgSize + item.poster_path"
-                    :alt="item.original_title"
-                    :contain="true"
-                    style=""
-                  ></v-img> -->
-            </v-tab>
-          </v-tabs>
-          <LoadingTwo v-else />
+            </div>
+          </div>
+          <LoadingTwo v-if="loading" />
         </div>
       </div>
     </div>
     <div v-if="title == 'Trending'">
       <div v-if="movies.length" class="tabBarContainer">
+        <!-- header  -->
         <div class="tabHeader">
           <div class="titleWrapper_cont">
             <header>{{ title }}</header>
@@ -143,310 +137,152 @@
         <div data-aos="fade-up" data-aos-duration="500" class="tab_wrapper">
           <!-- all  -->
           <template v-if="currentTrend == items[0].title">
-            <v-tabs
-              hide-slider
-              color="transparent"
-              center-active
-              :dark="false"
-              :height="`100%`"
-            >
-              <v-tab
-                :ripple="false"
-                v-for="(item, index) in movies"
-                :key="index"
-                class="listingTab personTab"
-                style="width: 250px; padding-left: 0"
-              >
-                <!-- movies  -->
-                <div v-if="item.media_type == 'movie'" class="flex_down">
-                  <div
-                    class="relative imgContainer"
-                    :class="{ trending: !item.overview }"
+            <div class="d-flex justify-content-center">
+              <div class="mt-3 tab__container relative">
+                <button
+                  @click="scrollLeftNav"
+                  :class="{ visibleButton: !showLeftButton }"
+                  class="testimonal__prev"
+                >
+                  <svg
+                    width="8"
+                    height="13"
+                    viewBox="0 0 8 13"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <nuxt-link :to="`/movie/${item.id}`">
-                      <img
-                        v-if="item.poster_path && item.poster_path != null"
-                        :src="imageLink + imgSize + item.poster_path"
-                        :alt="item.original_title"
-                      />
-                      <img
-                        v-else
-                        src="/images/poster.png"
-                        :alt="item.original_title"
-                      />
-                    </nuxt-link>
-                    <!-- ratings  -->
-                    <div class="absolute flex_all_center video_ratings">
-                      {{ refactorRatings(item.vote_average) }}
-                    </div>
-                    <!-- over view  -->
-                    <div v-if="item.overview" class="absolute overview">
-                      {{ item.overview.slice(0, 200) }}
-                      <span v-if="item.overview.length > 200">...</span>
-                      <nuxt-link :to="`/movie/${item.id}`">Read more</nuxt-link>
-                    </div>
-                  </div>
-                  <div class="listingTag">
-                    <nuxt-link :to="`/movie/${item.id}`">
-                      <h3>{{ item.original_title }}</h3>
-                    </nuxt-link>
-                    <p>
-                      {{
-                        new Date(item.release_date).toLocaleString("en-us", {
-                          month: "long",
-                          day: "numeric",
-                          year: "numeric",
-                        })
-                      }}
-                    </p>
-                  </div>
-                </div>
-                <!-- series  -->
-                <div v-if="item.media_type == 'tv'" class="flex_down">
-                  <div
-                    class="relative imgContainer"
-                    :class="{ trending: !item.overview }"
+                    <path
+                      d="M7 12L2 6.5L7 1"
+                      stroke="#000831"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </button>
+                <button
+                  @click="scrollRightNav"
+                  :class="{ visibleButton: !showRightButton }"
+                  class="testimonal__next"
+                >
+                  <svg
+                    width="8"
+                    height="13"
+                    viewBox="0 0 8 13"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <nuxt-link :to="`/seasonal/${item.id}`">
-                      <img
-                        v-if="
-                          item.poster_path == '' || item.poster_path == null
-                        "
-                        src="/images/poster.png"
-                        :alt="item.name"
-                      />
-                      <img
-                        v-else
-                        :src="imageLink + imgSize + item.poster_path"
-                        :alt="item.name"
-                      />
-                    </nuxt-link>
-                    <!-- ratings  -->
-                    <div class="absolute flex_all_center video_ratings">
-                      {{ refactorRatings(item.vote_average) }}
-                    </div>
-                    <!-- over view  -->
-                    <div v-if="item.overview" class="absolute overview">
-                      {{ item.overview.slice(0, 200) }}
-                      <span v-if="item.overview.length > 200">...</span>
-                      <nuxt-link :to="`/seasonal/${item.id}`"
-                        >Read more</nuxt-link
-                      >
-                    </div>
-                  </div>
-                  <div class="listingTag">
-                    <nuxt-link :to="`/seasonal/${item.id}`">
-                      <h3>{{ item.name }}</h3>
-                    </nuxt-link>
-                    <p>
-                      {{
-                        new Date(item.first_air_date).toLocaleString("en-us", {
-                          month: "long",
-                          day: "numeric",
-                          year: "numeric",
-                        })
-                      }}
-                    </p>
+                    <path
+                      d="M1 1L6 6.5L1 12"
+                      stroke="#000831"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </button>
+                <div
+                  @scroll="updateButtonVisibility"
+                  @mousedown="handleMouseDown"
+                  ref="scrollContainer"
+                  :class="{ isDragging: isDragging }"
+                  class="tab__content scrollSnap01"
+                >
+                  <div
+                    v-for="(item, index) in movies"
+                    :key="index"
+                    class="listingTab personTab"
+                  >
+                    <!-- movies  -->
+                    <template v-if="item.media_type == 'movie'">
+                      <ContentMovie :item="item" />
+                    </template>
+                    <!-- tv  -->
+                    <template v-else-if="item.media_type == 'tv'">
+                      <ContentTv :item="item" />
+                    </template>
+                    <!-- person -->
+                    <template v-else>
+                      <ContentPerson :item="item" />
+                    </template>
                   </div>
                 </div>
-                <!-- persons  -->
-                <div v-if="item.media_type == 'person'" class="flex_down">
-                  <div class="relative imgContainer trending">
-                    <nuxt-link :to="`/persons/${item.id}`">
-                      <img
-                        v-if="
-                          item.profile_path == '' || item.profile_path == null
-                        "
-                        src="/images/poster.png"
-                        :alt="item.original_name"
-                      />
-                      <img
-                        v-else
-                        :src="imageLink + imgSize + item.profile_path"
-                        :alt="item.original_name"
-                      />
-                    </nuxt-link>
-                    <!-- ratings  -->
-                    <div class="absolute flex_all_center video_ratings">
-                      {{ refactorRatings(item.popularity) }}
-                    </div>
-                  </div>
-                  <div class="listingTag">
-                    <nuxt-link
-                      :to="`/persons/${item.id}?query=${item.original_name}`"
-                    >
-                      <h3>{{ item.original_name }}</h3>
-                    </nuxt-link>
-                    <p>
-                      {{ item.known_for_department }}
-                    </p>
-                  </div>
-                </div>
-              </v-tab>
-            </v-tabs>
+              </div>
+            </div>
           </template>
           <!-- others  -->
           <template v-else>
-            <v-tabs
+            <div
               v-if="$getTrendingAll()[currentTrendView]"
-              hide-slider
-              color="transparent"
-              center-active
-              :dark="false"
-              :height="`100%`"
+              class="d-flex justify-content-center"
             >
-              <v-tab
-                :ripple="false"
-                v-for="(item, index) in $getTrendingAll()[currentTrendView]"
-                :key="index"
-                class="listingTab personTab"
-                style="width: 250px; padding-left: 0"
-              >
-                <!-- movies  -->
+              <div class="mt-3 tab__container relative">
+                <button
+                  @click="scrollLeftNav"
+                  :class="{ visibleButton: !showLeftButton }"
+                  class="testimonal__prev"
+                >
+                  <svg
+                    width="8"
+                    height="13"
+                    viewBox="0 0 8 13"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M7 12L2 6.5L7 1"
+                      stroke="#000831"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </button>
+                <button
+                  @click="scrollRightNav"
+                  :class="{ visibleButton: !showRightButton }"
+                  class="testimonal__next"
+                >
+                  <svg
+                    width="8"
+                    height="13"
+                    viewBox="0 0 8 13"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M1 1L6 6.5L1 12"
+                      stroke="#000831"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </button>
                 <div
-                  v-if="
-                    item?.media_type == 'movie' &&
-                    $getTrendingAll()[currentTrendView]
-                  "
-                  class="flex_down"
+                  @scroll="updateButtonVisibility"
+                  @mousedown="handleMouseDown"
+                  ref="scrollContainer"
+                  :class="{ isDragging: isDragging }"
+                  class="tab__content scrollSnap01"
                 >
                   <div
-                    class="relative imgContainer"
-                    :class="{ trending: !item.overview }"
+                    v-for="(item, index) in $getTrendingAll()[currentTrendView]"
+                    :key="index"
+                    class="listingTab personTab"
                   >
-                    <nuxt-link :to="`/movie/${item.id}`">
-                      <img
-                        v-if="item.poster_path && item.poster_path != null"
-                        :src="imageLink + imgSize + item.poster_path"
-                        :alt="item.original_title"
-                      />
-                      <img
-                        v-else
-                        src="/images/poster.png"
-                        :alt="item.original_title"
-                      />
-                    </nuxt-link>
-                    <!-- ratings  -->
-                    <div class="absolute flex_all_center video_ratings">
-                      {{ refactorRatings(item.vote_average) }}
-                    </div>
-                    <!-- over view  -->
-                    <div v-if="item.overview" class="absolute overview">
-                      {{ item.overview.slice(0, 200) }}
-                      <span v-if="item.overview.length > 200">...</span>
-                      <nuxt-link :to="`/movie/${item.id}`">Read more</nuxt-link>
-                    </div>
-                  </div>
-                  <div class="listingTag">
-                    <nuxt-link :to="`/movie/${item.id}`">
-                      <h3>{{ item.original_title }}</h3>
-                    </nuxt-link>
-                    <p>
-                      {{
-                        new Date(item.release_date).toLocaleString("en-us", {
-                          month: "long",
-                          day: "numeric",
-                          year: "numeric",
-                        })
-                      }}
-                    </p>
+                    <!-- movies  -->
+                    <template v-if="item.media_type == 'movie'">
+                      <ContentMovie :item="item" />
+                    </template>
+                    <!-- tv  -->
+                    <template v-else-if="item.media_type == 'tv'">
+                      <ContentTv :item="item" />
+                    </template>
+                    <!-- person -->
+                    <template v-else>
+                      <ContentPerson :item="item" />
+                    </template>
                   </div>
                 </div>
-                <!-- series  -->
-                <div
-                  v-if="
-                    item?.media_type == 'tv' &&
-                    $getTrendingAll()[currentTrendView]
-                  "
-                  class="flex_down"
-                >
-                  <div
-                    class="relative imgContainer"
-                    :class="{ trending: !item.overview }"
-                  >
-                    <nuxt-link :to="`/seasonal/${item.id}`">
-                      <img
-                        v-if="
-                          item.poster_path == '' || item.poster_path == null
-                        "
-                        src="/images/poster.png"
-                        :alt="item.name"
-                      />
-                      <img
-                        v-else
-                        :src="imageLink + imgSize + item.poster_path"
-                        :alt="item.name"
-                      />
-                    </nuxt-link>
-                    <!-- ratings  -->
-                    <div class="absolute flex_all_center video_ratings">
-                      {{ refactorRatings(item.vote_average) }}
-                    </div>
-                    <!-- over view  -->
-                    <div v-if="item.overview" class="absolute overview">
-                      {{ item.overview.slice(0, 200) }}
-                      <span v-if="item.overview.length > 200">...</span>
-                      <nuxt-link :to="`/seasonal/${item.id}`"
-                        >Read more</nuxt-link
-                      >
-                    </div>
-                  </div>
-                  <div class="listingTag">
-                    <nuxt-link :to="`/seasonal/${item.id}`">
-                      <h3>{{ item.name }}</h3>
-                    </nuxt-link>
-                    <p>
-                      {{
-                        new Date(item.first_air_date).toLocaleString("en-us", {
-                          month: "long",
-                          day: "numeric",
-                          year: "numeric",
-                        })
-                      }}
-                    </p>
-                  </div>
-                </div>
-                <!-- persons  -->
-                <div
-                  v-if="
-                    item?.media_type == 'person' &&
-                    $getTrendingAll()[currentTrendView]
-                  "
-                  class="flex_down"
-                >
-                  <div class="relative imgContainer trending">
-                    <nuxt-link :to="`/persons/${item.id}`">
-                      <img
-                        v-if="
-                          item.profile_path == '' || item.profile_path == null
-                        "
-                        src="/images/poster.png"
-                        :alt="item.original_name"
-                      />
-                      <img
-                        v-else
-                        :src="imageLink + imgSize + item.profile_path"
-                        :alt="item.original_name"
-                      />
-                    </nuxt-link>
-                    <!-- ratings  -->
-                    <div class="absolute flex_all_center video_ratings">
-                      {{ refactorRatings(item.popularity) }}
-                    </div>
-                  </div>
-                  <div class="listingTag">
-                    <nuxt-link
-                      :to="`/persons/${item.id}?query=${item.original_name}`"
-                    >
-                      <h3>{{ item.original_name }}</h3>
-                    </nuxt-link>
-                    <p>
-                      {{ item.known_for_department }}
-                    </p>
-                  </div>
-                </div>
-              </v-tab>
-            </v-tabs>
+              </div>
+            </div>
             <LoadingTwo v-else />
           </template>
         </div>
@@ -455,85 +291,32 @@
     <div v-if="title == 'known for'">
       <div v-if="movies.length" class="tabBarContainer">
         <div data-aos="fade-up" data-aos-duration="500" class="tab_wrapper">
-          <v-tabs
-            hide-slider
-            color="transparent"
-            center-active
-            :dark="false"
-            :height="`100%`"
-          >
-            <v-tab
-              :ripple="false"
-              v-for="(item, index) in movies[0].known_for"
-              :key="index"
-              class="listingTab"
-              style="width: 250px; padding-left: 0"
-            >
-              <!-- movies  -->
-              <div v-if="item.media_type == 'movie'" class="flex_down">
-                <div class="relative imgContainer trending">
-                  <nuxt-link :to="`/movie/${item.id}`">
-                    <img
-                      v-if="item.poster_path && item.poster_path != null"
-                      :src="imageLink + imgSize + item.poster_path"
-                      :alt="item.original_title"
-                    />
-                    <img
-                      v-else
-                      src="/images/poster.png"
-                      :alt="item.original_title"
-                    />
-                  </nuxt-link>
-                </div>
-                <div class="listingTag">
-                  <nuxt-link :to="`/movie/${item.id}`">
-                    <h3>{{ item.original_title }}</h3>
-                  </nuxt-link>
-                  <p>
-                    {{
-                      new Date(item.release_date).toLocaleString("en-us", {
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric",
-                      })
-                    }}
-                  </p>
+          <div class="d-flex">
+            <div style="padding: 0" class="mt-3 tab__container relative">
+              <div
+                @scroll="updateButtonVisibility"
+                @mousedown="handleMouseDown"
+                ref="scrollContainer"
+                :class="{ isDragging: isDragging }"
+                class="tab__content scrollSnap01"
+              >
+                <div
+                  v-for="(item, index) in movies[0].known_for"
+                  :key="index"
+                  class="listingTab noEffect"
+                >
+                  <!-- movies  -->
+                  <template v-if="item.media_type == 'movie'">
+                    <ContentMovie :item="item" />
+                  </template>
+                  <!-- tv  -->
+                  <template v-else-if="item.media_type == 'tv'">
+                    <ContentTv :item="item" />
+                  </template>
                 </div>
               </div>
-              <!-- series  -->
-              <div v-if="item.media_type == 'tv'" class="flex_down">
-                <div class="relative imgContainer trending">
-                  <nuxt-link :to="`/seasonal/${item.id}`">
-                    <img
-                      v-if="item.poster_path == '' || item.poster_path == null"
-                      src="/images/poster.png"
-                      :alt="item.name"
-                    />
-                    <img
-                      v-else
-                      :src="imageLink + imgSize + item.poster_path"
-                      :alt="item.name"
-                    />
-                  </nuxt-link>
-                  <!-- ratings  -->
-                </div>
-                <div class="listingTag">
-                  <nuxt-link :to="`/seasonal/${item.id}`">
-                    <h3>{{ item.name }}</h3>
-                  </nuxt-link>
-                  <p>
-                    {{
-                      new Date(item.first_air_date).toLocaleString("en-us", {
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric",
-                      })
-                    }}
-                  </p>
-                </div>
-              </div>
-            </v-tab>
-          </v-tabs>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -541,12 +324,12 @@
 </template>
 
 <script>
+import tabControl from "~/mixins/tab";
 export default {
+  mixins: [tabControl],
   props: ["movies", "title", "pagination", "item", "trendingParams"],
   data() {
     return {
-      imageLink: process.env.API_BASE_IMAGE,
-      imgSize: "original/",
       page: 1,
       currentTrend: "all",
       currentTrendView: null,
