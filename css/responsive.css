@@ -1,0 +1,328 @@
+@media (prefers-color-scheme: dark) {
+    /* dark mode styles go here */
+}
+
+.dark {
+    /* display: none !important; */
+    --bg-color: #1f2931;
+    --nav-color: #1f2931;
+    --secondary-color: #1f2931;
+    --text-color: #fff;
+    --loader-color: #fff;
+    --btn-bg-color: #1f2931;
+    --primary-color: #bf1e22;
+    --svg-color: #bf1e22;
+    transition: all 0.3s ease-in-out;
+}
+
+body .dark,
+.dark .v-tabs.theme--light,
+.dark .v-tabs.theme--light>.v-tabs-bar,
+.dark .v-main__wrap,
+.dark #search,
+.dark #footer {
+    background-color: var(--btn-bg-color) !important;
+    transition: all 0.3s ease-in-out;
+}
+
+.dark .nothingLoaded {
+    background: var(--bg-color);
+    transition: all 0.3s ease-in-out;
+}
+
+.dark .v-slide-group__prev i,
+.v-slide-group__next i {
+    color: var(--text-color) !important;
+    transition: all 0.3s ease-in-out;
+}
+
+.dark .theme--light.v-divider {
+    border-color: var(--text-color) !important;
+    transition: all 0.3s ease-in-out;
+}
+
+.dark .theme--light.v-card,
+.dark .theme--light.v-list {
+    background-color: var(--bg-color) !important;
+    transition: all 0.3s ease-in-out;
+}
+
+.dark .v-list-item__subtitle {
+    color: var(--text-color) !important;
+    transition: all 0.3s ease-in-out;
+}
+
+.dark .colored {
+    color: var(--secondary-color) !important;
+    transition: all 0.3s ease-in-out;
+}
+
+.dark .v-tabs-slider {
+    background-color: var(--text-color) !important;
+    transition: all 0.3s ease-in-out;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    cursor: pointer;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: none;
+    /* border-radius: 10px;
+    background: rgba(0, 0, 0, 0.7); */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: var(--svg-color);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+    transition: all 0.5s linear;
+}
+
+@media (max-width: 1040px) {
+    .img_large_container {
+        height: calc(100vh - 20vh) !important;
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+
+}
+
+@media (max-width: 959px) {
+
+    .contentInfoWrapper .contentRow .content_container .hero_content .content_columns header.content_title,
+    #heroSection .containedHero .contentRow .content_container .hero_content .content_columns header.content_title {
+        font-size: 3.5rem !important;
+    }
+
+    .contentInfoWrapper .contentRow .content_container .hero_content .content_columns .ratings_wrapper span.bold,
+    #heroSection .containedHero .contentRow .content_container .hero_content .content_columns .ratings_wrapper span.bold {
+        font-size: 1.6rem !important;
+    }
+
+    .v-progress-circular {
+        height: 35px !important;
+        width: 35px !important;
+    }
+
+    .contentInfoWrapper .contentRow .content_container .hero_content .content_columns .ratings_wrapper span.rating_percent,
+    #heroSection .containedHero .contentRow .content_container .hero_content .content_columns .ratings_wrapper span.rating_percent {
+        font-size: 1.1rem !important;
+    }
+
+    .contentInfoWrapper .contentRow .content_container .hero_content .content_columns .ratings_wrapper span,
+    #heroSection .containedHero .contentRow .content_container .hero_content .content_columns .ratings_wrapper span {
+        font-size: 1.4rem !important;
+    }
+
+    .listingTag h3 {
+        font-size: 1.4rem !important;
+    }
+
+    .imgContainer.persons {
+        width: 30%;
+    }
+
+    .img_header p {
+        font-size: 1.4rem !important;
+        padding: 0 10px 5px !important;
+    }
+
+    .tabBarContainer .tabHeader.similar,
+    .tabBarContainer .tabHeader {
+        padding-left: 12px;
+    }
+
+    .listingTab.personTab.v-tab:first-child {
+        margin-left: 12px;
+    }
+
+    .listingTab.similar.v-tab:first-child {
+        margin-left: 12px;
+    }
+
+    .listingTab.personTab.v-tab:last-child {
+        margin-right: 12px;
+    }
+
+    .topBarNav {
+        padding: 0 !important;
+    }
+
+    .seasonList .listWrapper>a {
+        display: none;
+    }
+
+    .seasonList .listWrapper img {
+        display: none;
+    }
+
+    .seasonList .listWrapper>div {
+        width: 100%;
+        padding: 12px;
+    }
+
+    .seasonList .listWrapper>div p {
+        font-size: 1.4rem;
+    }
+
+    .seasonList .listWrapper>div>span {
+        font-size: 1.4rem;
+        line-height: 20px;
+    }
+}
+
+@media (max-width: 599px) {
+
+    .contentInfoWrapper .contentRow .content_container .hero_content .content_columns header.content_title,
+    #heroSection .containedHero .contentRow .content_container .hero_content .content_columns header.content_title {
+        font-size: 2.5rem !important;
+    }
+
+    .contentInfoWrapper .contentRow .content_container .hero_content .content_columns .ratings_wrapper span.bold,
+    #heroSection .containedHero .contentRow .content_container .hero_content .content_columns .ratings_wrapper span.bold {
+        font-size: 1.4rem !important;
+    }
+
+    .v-progress-circular {
+        height: 30px !important;
+        width: 30px !important;
+    }
+
+    .contentInfoWrapper .contentRow .content_container .hero_content .content_columns .ratings_wrapper span.rating_percent,
+    #heroSection .containedHero .contentRow .content_container .hero_content .content_columns .ratings_wrapper span.rating_percent {
+        font-size: 1rem !important;
+    }
+
+    .contentInfoWrapper .contentRow .content_container .hero_content .content_columns .ratings_wrapper span,
+    #heroSection .containedHero .contentRow .content_container .hero_content .content_columns .ratings_wrapper span {
+        font-size: 1.2rem !important;
+    }
+
+    #heroSection .containedHero .contentRow .content_container .hero_content {
+        gap: 10px !important;
+    }
+
+    .col-3.poster.flex_all_center {
+        display: none !important;
+    }
+
+    #heroSection .containedHero .contentRow .content_container {
+        margin-top: 100px !important;
+        margin-left: 0;
+    }
+
+    .contentInfoWrapper .contentRow .content_container {
+        margin-left: 0;
+    }
+
+    .review_card .v-list-item {
+        display: block !important;
+    }
+
+    .media_scroller {
+        grid-auto-columns: 100% !important;
+    }
+
+    .imgContainer.persons {
+        width: 70%;
+    }
+
+    header.nameTitle {
+        font-size: 2.5rem !important;
+    }
+
+    .rightNav.leftNav nav {
+        display: none;
+    }
+
+    .rightNav form {
+        display: none;
+    }
+
+    .rightNav.leftNav form {
+        display: block !important;
+    }
+
+    .rightNav.mobile {
+        width: 50%;
+        margin-right: -12px;
+    }
+
+    .hamburger {
+        display: block !important;
+    }
+
+    .img_large_container iframe {
+        height: calc(100% - 30vh) !important;
+    }
+
+    .img_header {
+        justify-content: flex-start !important;
+        padding: 0 !important;
+    }
+
+    .img_header p {
+        width: 80%;
+        padding: 0 !important;
+    }
+
+}
+
+@media (max-width: 430px) {
+    #heroSection .containedHero .contentRow .content_container {
+        margin-top: 0 !important;
+    }
+
+    #heroSection .containedHero .contentRow .content_container.seasons {
+        margin-top: 70px !important;
+    }
+
+    .imgContainer.persons {
+        width: 100%;
+    }
+
+    .pagination_container {
+        width: 100%;
+    }
+
+    .tabBarContainer .tabHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        grid-gap: 12px;
+    }
+
+    .tabBarContainer .tabHeader div:nth-child(2) {
+        /* display: flex;
+        justify-content: flex-end; */
+        width: 100%;
+        margin: 0;
+    }
+
+    .tabBarContainer .tabHeader div:nth-child(2)>nav,
+    .tabBarContainer .tabHeader div:nth-child(2)>button {
+        width: calc(100% - 12px) !important;
+    }
+
+    .tabBarContainer .tabHeader div:nth-child(2)>nav ul {
+        justify-content: center !important;
+    }
+
+    .tabBarContainer .tabHeader .pagination_container_videos {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+    }
+
+}
