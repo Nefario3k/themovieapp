@@ -10,6 +10,11 @@
     font-size: 62.5%;
 }
 
+@font-face {
+    font-family: 'Grotesk';
+    src: url(../font/SpaceGrotesk[wght].ttf) format('truetype');
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -19,7 +24,7 @@ body {
 }
 
 * {
-    font-family: Epilogue !important;
+    font-family: 'Grotesk', sans-serif !important;
     padding: 0;
     margin: 0;
     box-sizing: border-box;

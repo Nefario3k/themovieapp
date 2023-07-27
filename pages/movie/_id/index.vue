@@ -450,7 +450,7 @@ export default {
             `${this.requestParams.media}/${this.requestParams.id}?api_key=${this.requestParams.key}&languagae=${this.requestParams.lang}`
           )
           .then((res) => {
-            Object.assign(this.movie, res.data);
+            this.movie = res.data;
             //   reset vote average due to it coming back from the api as a long numerical decimal
             this.movie.vote_average = Math.ceil(this.movie.vote_average * 10);
             if (this.movie.vote_average >= 75) {
@@ -631,9 +631,7 @@ export default {
   },
   head() {
     return {
-      title:
-        this.movie.original_title +
-        " - Latest Streaming Movies And series info",
+      title: this.movie?.original_title ? this.movie.original_title : "Movie",
       meta: [
         {
           hid: "description",

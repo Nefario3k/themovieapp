@@ -13,8 +13,8 @@ export default {
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - themovieapp',
-    title: 'themovieapp',
+    titleTemplate: '%s - Latest Streaming Movies And series info',
+    title: 'trailblazerapp',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },

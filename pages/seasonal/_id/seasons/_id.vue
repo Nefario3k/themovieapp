@@ -25,11 +25,7 @@
               <img v-else src="/images/poster.png" :alt="movie.name" />
             </div>
             <v-row
-              class="
-                col-12 col-sm-9 col-md-9 col-lg-9 col-xl-9
-                content_container
-                seasons
-              "
+              class="col-12 col-sm-9 col-md-9 col-lg-9 col-xl-9 content_container seasons"
             >
               <div class="hero_content" style="gap: 0 !important">
                 <div class="content_columns content_ratings">
@@ -123,7 +119,9 @@ export default {
   },
   head() {
     return {
-      title: this.season.name + " - " + this.movie.name,
+      title: this.season.name
+        ? this.season.name + "-" + this.movie.name
+        : "Seasons",
       meta: [
         {
           hid: "description",

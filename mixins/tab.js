@@ -44,6 +44,16 @@ export default {
             this.isDragging = false
         },
     },
+    watch: {
+        loading() {
+            if (!this.loading) {
+                this.$nextTick(() => {
+                    this.$refs.scrollContainer.scrollLeft = 0
+                    return;
+                })
+            }
+        }
+    },
     mounted() {
         window.addEventListener('mousemove', this.handleMouseMove)
         window.addEventListener('mouseup', this.handleMouseUp)

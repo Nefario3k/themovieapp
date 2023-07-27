@@ -83,7 +83,7 @@ export default {
   },
   head() {
     return {
-      title: this.person.name + " - Celebrity",
+      title: this.person.name ? this.person.name : "Celebrity",
       meta: [
         {
           hid: "description",
